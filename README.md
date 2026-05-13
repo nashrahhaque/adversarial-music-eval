@@ -2,8 +2,7 @@
 ### SD-MIAE Applied to Generative Music Identity Protection
 
 > A research prototype demonstrating how adversarial ML methodology
-> can protect artist identity in AI-powered music generation systems —
-> built for Spotify's Artist-First AI Music Lab.
+> can protect artist identity in AI-powered music generation systems!
 
 ---
 
@@ -282,5 +281,3 @@ Every design choice in this system reflects Spotify's stated principles:
 
 ---
 
-*Built as a technical demonstration for the Data Scientist role,
-Spotify Artist-First AI Music Lab.*
