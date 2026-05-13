@@ -1,0 +1,1522 @@
+{
+  "Taylor Swift": {
+    "name": "Taylor Swift",
+    "listeners": 5960532,
+    "playcount": 3692719652,
+    "url": "https://www.last.fm/music/Taylor+Swift",
+    "tags": [
+      {
+        "name": "country",
+        "count": 100
+      },
+      {
+        "name": "pop",
+        "count": 85
+      },
+      {
+        "name": "female vocalists",
+        "count": 42
+      },
+      {
+        "name": "singer-songwriter",
+        "count": 30
+      },
+      {
+        "name": "acoustic",
+        "count": 11
+      },
+      {
+        "name": "country pop",
+        "count": 4
+      },
+      {
+        "name": "taylor swift",
+        "count": 4
+      },
+      {
+        "name": "american",
+        "count": 1
+      },
+      {
+        "name": "snake",
+        "count": 1
+      },
+      {
+        "name": "alternative",
+        "count": 1
+      }
+    ],
+    "top_tracks": [
+      {
+        "name": "Blank Space",
+        "playcount": 28305610,
+        "listeners": 1840643,
+        "rank": 1
+      },
+      {
+        "name": "Cruel Summer",
+        "playcount": 49197522,
+        "listeners": 1697122,
+        "rank": 2
+      },
+      {
+        "name": "Shake It Off",
+        "playcount": 18876352,
+        "listeners": 1634977,
+        "rank": 3
+      },
+      {
+        "name": "Style",
+        "playcount": 34263473,
+        "listeners": 1602761,
+        "rank": 4
+      },
+      {
+        "name": "cardigan",
+        "playcount": 45145069,
+        "listeners": 1552491,
+        "rank": 5
+      },
+      {
+        "name": "Love Story",
+        "playcount": 14427877,
+        "listeners": 1503897,
+        "rank": 6
+      },
+      {
+        "name": "You Belong with Me",
+        "playcount": 13826770,
+        "listeners": 1443817,
+        "rank": 7
+      },
+      {
+        "name": "august",
+        "playcount": 43040148,
+        "listeners": 1379059,
+        "rank": 8
+      },
+      {
+        "name": "Lover",
+        "playcount": 27585928,
+        "listeners": 1351785,
+        "rank": 9
+      },
+      {
+        "name": "Anti-Hero",
+        "playcount": 34620200,
+        "listeners": 1349689,
+        "rank": 10
+      }
+    ],
+    "similar_artists": [
+      {
+        "name": "Sabrina Carpenter",
+        "match": 1.0
+      },
+      {
+        "name": "Olivia Rodrigo",
+        "match": 0.946501
+      },
+      {
+        "name": "Gracie Abrams",
+        "match": 0.670877
+      },
+      {
+        "name": "Harry Styles",
+        "match": 0.469283
+      },
+      {
+        "name": "Chappell Roan",
+        "match": 0.445569
+      },
+      {
+        "name": "Lorde",
+        "match": 0.440963
+      },
+      {
+        "name": "Kelsea Ballerini",
+        "match": 0.415808
+      },
+      {
+        "name": "Maisie Peters",
+        "match": 0.39918
+      },
+      {
+        "name": "Selena Gomez",
+        "match": 0.393732
+      },
+      {
+        "name": "Conan Gray",
+        "match": 0.379326
+      }
+    ]
+  },
+  "Drake": {
+    "name": "Drake",
+    "listeners": 6738583,
+    "playcount": 1174169000,
+    "url": "https://www.last.fm/music/Drake",
+    "tags": [
+      {
+        "name": "hip-hop",
+        "count": 100
+      },
+      {
+        "name": "rap",
+        "count": 71
+      },
+      {
+        "name": "rnb",
+        "count": 34
+      },
+      {
+        "name": "hip hop",
+        "count": 26
+      },
+      {
+        "name": "canadian",
+        "count": 12
+      },
+      {
+        "name": "drake",
+        "count": 4
+      },
+      {
+        "name": "pop",
+        "count": 3
+      },
+      {
+        "name": "r&b",
+        "count": 1
+      },
+      {
+        "name": "young money",
+        "count": 1
+      },
+      {
+        "name": "canada",
+        "count": 1
+      }
+    ],
+    "top_tracks": [
+      {
+        "name": "One Dance",
+        "playcount": 23227676,
+        "listeners": 1986693,
+        "rank": 1
+      },
+      {
+        "name": "Best I Ever Had",
+        "playcount": 12635104,
+        "listeners": 1808694,
+        "rank": 2
+      },
+      {
+        "name": "Passionfruit",
+        "playcount": 28691091,
+        "listeners": 1632494,
+        "rank": 3
+      },
+      {
+        "name": "God's Plan",
+        "playcount": 14876575,
+        "listeners": 1478812,
+        "rank": 4
+      },
+      {
+        "name": "Hotline Bling",
+        "playcount": 12828420,
+        "listeners": 1463501,
+        "rank": 5
+      },
+      {
+        "name": "Hold On, We're Going Home",
+        "playcount": 15308765,
+        "listeners": 1270837,
+        "rank": 6
+      },
+      {
+        "name": "Forever",
+        "playcount": 6824798,
+        "listeners": 1263938,
+        "rank": 7
+      },
+      {
+        "name": "Headlines",
+        "playcount": 16035440,
+        "listeners": 1167788,
+        "rank": 8
+      },
+      {
+        "name": "Jimmy Cooks (feat. 21 Savage)",
+        "playcount": 17709142,
+        "listeners": 1046465,
+        "rank": 9
+      },
+      {
+        "name": "Over",
+        "playcount": 6805862,
+        "listeners": 1016619,
+        "rank": 10
+      }
+    ],
+    "similar_artists": [
+      {
+        "name": "PARTYNEXTDOOR",
+        "match": 1.0
+      },
+      {
+        "name": "DJ Khaled",
+        "match": 0.617462
+      },
+      {
+        "name": "Drake & Future",
+        "match": 0.563952
+      },
+      {
+        "name": "Tory Lanez",
+        "match": 0.519635
+      },
+      {
+        "name": "Bryson Tiller",
+        "match": 0.45877
+      },
+      {
+        "name": "Lil Baby",
+        "match": 0.43901
+      },
+      {
+        "name": "Gunna",
+        "match": 0.430448
+      },
+      {
+        "name": "Future",
+        "match": 0.426076
+      },
+      {
+        "name": "Travi$ Scott",
+        "match": 0.393257
+      },
+      {
+        "name": "Meek Mill",
+        "match": 0.389774
+      }
+    ]
+  },
+  "Billie Eilish": {
+    "name": "Billie Eilish",
+    "listeners": 4248142,
+    "playcount": 841110926,
+    "url": "https://www.last.fm/music/Billie+Eilish",
+    "tags": [
+      {
+        "name": "pop",
+        "count": 100
+      },
+      {
+        "name": "indie pop",
+        "count": 67
+      },
+      {
+        "name": "electropop",
+        "count": 41
+      },
+      {
+        "name": "art pop",
+        "count": 28
+      },
+      {
+        "name": "alternative",
+        "count": 14
+      },
+      {
+        "name": "female vocalists",
+        "count": 12
+      },
+      {
+        "name": "indie",
+        "count": 12
+      },
+      {
+        "name": "electronic",
+        "count": 3
+      },
+      {
+        "name": "alternative rnb",
+        "count": 3
+      },
+      {
+        "name": "american",
+        "count": 3
+      }
+    ],
+    "top_tracks": [
+      {
+        "name": "BIRDS OF A FEATHER",
+        "playcount": 55631301,
+        "listeners": 2226369,
+        "rank": 1
+      },
+      {
+        "name": "bad guy",
+        "playcount": 20370766,
+        "listeners": 1668629,
+        "rank": 2
+      },
+      {
+        "name": "WILDFLOWER",
+        "playcount": 36204966,
+        "listeners": 1641342,
+        "rank": 3
+      },
+      {
+        "name": "when the party's over",
+        "playcount": 22278799,
+        "listeners": 1616140,
+        "rank": 4
+      },
+      {
+        "name": "LUNCH",
+        "playcount": 27911393,
+        "listeners": 1586382,
+        "rank": 5
+      },
+      {
+        "name": "Happier Than Ever",
+        "playcount": 29159464,
+        "listeners": 1553793,
+        "rank": 6
+      },
+      {
+        "name": "CHIHIRO",
+        "playcount": 32109024,
+        "listeners": 1544720,
+        "rank": 7
+      },
+      {
+        "name": "ocean eyes",
+        "playcount": 18483115,
+        "listeners": 1530403,
+        "rank": 8
+      },
+      {
+        "name": "lovely (with Khalid)",
+        "playcount": 18231245,
+        "listeners": 1505083,
+        "rank": 9
+      },
+      {
+        "name": "everything i wanted",
+        "playcount": 21774156,
+        "listeners": 1461633,
+        "rank": 10
+      }
+    ],
+    "similar_artists": [
+      {
+        "name": "FINNEAS",
+        "match": 1.0
+      },
+      {
+        "name": "Olivia Rodrigo",
+        "match": 0.587102
+      },
+      {
+        "name": "Melanie Martinez",
+        "match": 0.479704
+      },
+      {
+        "name": "Lana Del Rey",
+        "match": 0.400212
+      },
+      {
+        "name": "Ariana Grande",
+        "match": 0.375103
+      },
+      {
+        "name": "Gracie Abrams",
+        "match": 0.342939
+      },
+      {
+        "name": "Chappell Roan",
+        "match": 0.335662
+      },
+      {
+        "name": "Madison Beer",
+        "match": 0.323259
+      },
+      {
+        "name": "Rene\u00e9 Rapp",
+        "match": 0.319467
+      },
+      {
+        "name": "Conan Gray",
+        "match": 0.311294
+      }
+    ]
+  },
+  "The Weeknd": {
+    "name": "The Weeknd",
+    "listeners": 5341156,
+    "playcount": 1130477138,
+    "url": "https://www.last.fm/music/The+Weeknd",
+    "tags": [
+      {
+        "name": "rnb",
+        "count": 100
+      },
+      {
+        "name": "electronic",
+        "count": 72
+      },
+      {
+        "name": "dubstep",
+        "count": 26
+      },
+      {
+        "name": "canadian",
+        "count": 25
+      },
+      {
+        "name": "prog-rnb",
+        "count": 7
+      },
+      {
+        "name": "pop",
+        "count": 6
+      },
+      {
+        "name": "r&b",
+        "count": 6
+      },
+      {
+        "name": "alternative rnb",
+        "count": 1
+      },
+      {
+        "name": "soul",
+        "count": 1
+      },
+      {
+        "name": "hip-hop",
+        "count": 1
+      }
+    ],
+    "top_tracks": [
+      {
+        "name": "Blinding Lights",
+        "playcount": 38542475,
+        "listeners": 2359437,
+        "rank": 1
+      },
+      {
+        "name": "Starboy",
+        "playcount": 33905324,
+        "listeners": 2357892,
+        "rank": 2
+      },
+      {
+        "name": "The Hills",
+        "playcount": 27804963,
+        "listeners": 2130638,
+        "rank": 3
+      },
+      {
+        "name": "Die for You",
+        "playcount": 34172355,
+        "listeners": 2006230,
+        "rank": 4
+      },
+      {
+        "name": "Can't Feel My Face",
+        "playcount": 18863187,
+        "listeners": 1869588,
+        "rank": 5
+      },
+      {
+        "name": "Save Your Tears",
+        "playcount": 27470229,
+        "listeners": 1865213,
+        "rank": 6
+      },
+      {
+        "name": "Stargirl Interlude",
+        "playcount": 37215804,
+        "listeners": 1808853,
+        "rank": 7
+      },
+      {
+        "name": "Call Out My Name",
+        "playcount": 21165795,
+        "listeners": 1583901,
+        "rank": 8
+      },
+      {
+        "name": "One of the Girls (with JENNIE, Lily Rose Depp)",
+        "playcount": 27768415,
+        "listeners": 1470257,
+        "rank": 9
+      },
+      {
+        "name": "I Feel It Coming",
+        "playcount": 16017583,
+        "listeners": 1460606,
+        "rank": 10
+      }
+    ],
+    "similar_artists": [
+      {
+        "name": "Tory Lanez",
+        "match": 1.0
+      },
+      {
+        "name": "Drake",
+        "match": 0.907622
+      },
+      {
+        "name": "PARTYNEXTDOOR",
+        "match": 0.82732
+      },
+      {
+        "name": "Black Atlass",
+        "match": 0.812114
+      },
+      {
+        "name": "Don Toliver",
+        "match": 0.739254
+      },
+      {
+        "name": "Majid Jordan",
+        "match": 0.663801
+      },
+      {
+        "name": "Brent Faiyaz",
+        "match": 0.642681
+      },
+      {
+        "name": "Bruno Mars",
+        "match": 0.633609
+      },
+      {
+        "name": "Frank Ocean",
+        "match": 0.633139
+      },
+      {
+        "name": "Bryson Tiller",
+        "match": 0.558578
+      }
+    ]
+  },
+  "Kendrick Lamar": {
+    "name": "Kendrick Lamar",
+    "listeners": 5114982,
+    "playcount": 1035906248,
+    "url": "https://www.last.fm/music/Kendrick+Lamar",
+    "tags": [
+      {
+        "name": "hip-hop",
+        "count": 100
+      },
+      {
+        "name": "rap",
+        "count": 70
+      },
+      {
+        "name": "west coast",
+        "count": 19
+      },
+      {
+        "name": "hip hop",
+        "count": 16
+      },
+      {
+        "name": "compton",
+        "count": 6
+      },
+      {
+        "name": "california",
+        "count": 6
+      },
+      {
+        "name": "jazz rap",
+        "count": 5
+      },
+      {
+        "name": "conscious",
+        "count": 2
+      },
+      {
+        "name": "conscious hip hop",
+        "count": 1
+      },
+      {
+        "name": "west coast hip hop",
+        "count": 1
+      }
+    ],
+    "top_tracks": [
+      {
+        "name": "HUMBLE.",
+        "playcount": 31407141,
+        "listeners": 2279680,
+        "rank": 1
+      },
+      {
+        "name": "Money Trees",
+        "playcount": 35242783,
+        "listeners": 2126457,
+        "rank": 2
+      },
+      {
+        "name": "Not Like Us",
+        "playcount": 30151552,
+        "listeners": 1935758,
+        "rank": 3
+      },
+      {
+        "name": "Alright",
+        "playcount": 31583555,
+        "listeners": 1887829,
+        "rank": 4
+      },
+      {
+        "name": "All the Stars (with SZA)",
+        "playcount": 26509803,
+        "listeners": 1846363,
+        "rank": 5
+      },
+      {
+        "name": "PRIDE.",
+        "playcount": 33075393,
+        "listeners": 1816726,
+        "rank": 6
+      },
+      {
+        "name": "DNA.",
+        "playcount": 24764191,
+        "listeners": 1743294,
+        "rank": 7
+      },
+      {
+        "name": "LOVE. FEAT. ZACARI.",
+        "playcount": 25595885,
+        "listeners": 1705123,
+        "rank": 8
+      },
+      {
+        "name": "luther (with SZA)",
+        "playcount": 27929872,
+        "listeners": 1534662,
+        "rank": 9
+      },
+      {
+        "name": "Bitch, Don\u2019t Kill My Vibe",
+        "playcount": 18842789,
+        "listeners": 1533863,
+        "rank": 10
+      }
+    ],
+    "similar_artists": [
+      {
+        "name": "Baby Keem",
+        "match": 1.0
+      },
+      {
+        "name": "Jay Rock",
+        "match": 0.914595
+      },
+      {
+        "name": "JID",
+        "match": 0.89607
+      },
+      {
+        "name": "Tyler, The Creator",
+        "match": 0.869737
+      },
+      {
+        "name": "Black Hippy",
+        "match": 0.818108
+      },
+      {
+        "name": "Kanye West",
+        "match": 0.785757
+      },
+      {
+        "name": "Denzel Curry",
+        "match": 0.755355
+      },
+      {
+        "name": "Joey Bada$$",
+        "match": 0.735275
+      },
+      {
+        "name": "ScHoolboy Q",
+        "match": 0.732873
+      },
+      {
+        "name": "Kendrick Lamar & SZA",
+        "match": 0.705731
+      }
+    ]
+  },
+  "Olivia Rodrigo": {
+    "name": "Olivia Rodrigo",
+    "listeners": 3135923,
+    "playcount": 572425573,
+    "url": "https://www.last.fm/music/Olivia+Rodrigo",
+    "tags": [
+      {
+        "name": "pop",
+        "count": 100
+      },
+      {
+        "name": "pop rock",
+        "count": 73
+      },
+      {
+        "name": "rock",
+        "count": 19
+      },
+      {
+        "name": "indie pop",
+        "count": 18
+      },
+      {
+        "name": "female vocalists",
+        "count": 9
+      },
+      {
+        "name": "pop punk",
+        "count": 7
+      },
+      {
+        "name": "teen pop",
+        "count": 7
+      },
+      {
+        "name": "singer-songwriter",
+        "count": 2
+      },
+      {
+        "name": "american",
+        "count": 2
+      },
+      {
+        "name": "alt-pop",
+        "count": 1
+      }
+    ],
+    "top_tracks": [
+      {
+        "name": "good 4 u",
+        "playcount": 36338915,
+        "listeners": 1810909,
+        "rank": 1
+      },
+      {
+        "name": "deja vu",
+        "playcount": 30999206,
+        "listeners": 1642402,
+        "rank": 2
+      },
+      {
+        "name": "drivers license",
+        "playcount": 31069493,
+        "listeners": 1619134,
+        "rank": 3
+      },
+      {
+        "name": "vampire",
+        "playcount": 34290787,
+        "listeners": 1499010,
+        "rank": 4
+      },
+      {
+        "name": "traitor",
+        "playcount": 25810341,
+        "listeners": 1476073,
+        "rank": 5
+      },
+      {
+        "name": "jealousy, jealousy",
+        "playcount": 25342249,
+        "listeners": 1419192,
+        "rank": 6
+      },
+      {
+        "name": "brutal",
+        "playcount": 23370791,
+        "listeners": 1335280,
+        "rank": 7
+      },
+      {
+        "name": "favorite crime",
+        "playcount": 26180577,
+        "listeners": 1306784,
+        "rank": 8
+      },
+      {
+        "name": "bad idea right?",
+        "playcount": 25698434,
+        "listeners": 1207959,
+        "rank": 9
+      },
+      {
+        "name": "happier",
+        "playcount": 19059221,
+        "listeners": 1190455,
+        "rank": 10
+      }
+    ],
+    "similar_artists": [
+      {
+        "name": "Sabrina Carpenter",
+        "match": 1.0
+      },
+      {
+        "name": "Taylor Swift",
+        "match": 0.920267
+      },
+      {
+        "name": "Chappell Roan",
+        "match": 0.742925
+      },
+      {
+        "name": "Harry Styles",
+        "match": 0.676315
+      },
+      {
+        "name": "Conan Gray",
+        "match": 0.652561
+      },
+      {
+        "name": "Madison Beer",
+        "match": 0.606238
+      },
+      {
+        "name": "Gracie Abrams",
+        "match": 0.605959
+      },
+      {
+        "name": "Billie Eilish",
+        "match": 0.540492
+      },
+      {
+        "name": "Tate McRae",
+        "match": 0.47307
+      },
+      {
+        "name": "Ariana Grande",
+        "match": 0.451082
+      }
+    ]
+  },
+  "21 Savage": {
+    "name": "21 Savage",
+    "listeners": 2317226,
+    "playcount": 221387641,
+    "url": "https://www.last.fm/music/21+Savage",
+    "tags": [
+      {
+        "name": "trap",
+        "count": 100
+      },
+      {
+        "name": "hip-hop",
+        "count": 98
+      },
+      {
+        "name": "rap",
+        "count": 64
+      },
+      {
+        "name": "hip hop",
+        "count": 61
+      },
+      {
+        "name": "atlanta",
+        "count": 20
+      },
+      {
+        "name": "uk",
+        "count": 1
+      },
+      {
+        "name": "british",
+        "count": 1
+      },
+      {
+        "name": "southern hip hop",
+        "count": 1
+      },
+      {
+        "name": "underground rap",
+        "count": 1
+      },
+      {
+        "name": "gangsta rap",
+        "count": 1
+      }
+    ],
+    "top_tracks": [
+      {
+        "name": "a lot",
+        "playcount": 17352363,
+        "listeners": 1058051,
+        "rank": 1
+      },
+      {
+        "name": "ball w/o you",
+        "playcount": 14735528,
+        "listeners": 913585,
+        "rank": 2
+      },
+      {
+        "name": "redrum",
+        "playcount": 11050146,
+        "listeners": 912838,
+        "rank": 3
+      },
+      {
+        "name": "Glock In My Lap",
+        "playcount": 13726571,
+        "listeners": 893909,
+        "rank": 4
+      },
+      {
+        "name": "Runnin",
+        "playcount": 11767227,
+        "listeners": 863552,
+        "rank": 5
+      },
+      {
+        "name": "Rich Nigga Shit (feat. Young Thug)",
+        "playcount": 10672394,
+        "listeners": 735560,
+        "rank": 6
+      },
+      {
+        "name": "Bank Account",
+        "playcount": 7189331,
+        "listeners": 724765,
+        "rank": 7
+      },
+      {
+        "name": "n\u00e9e-nah",
+        "playcount": 6183985,
+        "listeners": 523443,
+        "rank": 8
+      },
+      {
+        "name": "n.h.i.e.",
+        "playcount": 4604304,
+        "listeners": 512855,
+        "rank": 9
+      },
+      {
+        "name": "No Heart",
+        "playcount": 5055178,
+        "listeners": 485468,
+        "rank": 10
+      }
+    ],
+    "similar_artists": [
+      {
+        "name": "Metro Boomin",
+        "match": 1.0
+      },
+      {
+        "name": "Future",
+        "match": 0.649995
+      },
+      {
+        "name": "Offset",
+        "match": 0.613039
+      },
+      {
+        "name": "Travi$ Scott",
+        "match": 0.596793
+      },
+      {
+        "name": "21 Savage & Metro Boomin",
+        "match": 0.594167
+      },
+      {
+        "name": "Lil Baby",
+        "match": 0.56177
+      },
+      {
+        "name": "Quavo",
+        "match": 0.549348
+      },
+      {
+        "name": "Migos",
+        "match": 0.536898
+      },
+      {
+        "name": "Young Stoner Life",
+        "match": 0.513928
+      },
+      {
+        "name": "Huncho Jack",
+        "match": 0.506222
+      }
+    ]
+  },
+  "Lorde": {
+    "name": "Lorde",
+    "listeners": 3740030,
+    "playcount": 453123493,
+    "url": "https://www.last.fm/music/Lorde",
+    "tags": [
+      {
+        "name": "pop",
+        "count": 100
+      },
+      {
+        "name": "indie pop",
+        "count": 87
+      },
+      {
+        "name": "electronic",
+        "count": 50
+      },
+      {
+        "name": "indie",
+        "count": 45
+      },
+      {
+        "name": "new zealand",
+        "count": 17
+      },
+      {
+        "name": "female vocalists",
+        "count": 10
+      },
+      {
+        "name": "alternative",
+        "count": 6
+      },
+      {
+        "name": "art pop",
+        "count": 2
+      },
+      {
+        "name": "synthpop",
+        "count": 1
+      },
+      {
+        "name": "electropop",
+        "count": 1
+      }
+    ],
+    "top_tracks": [
+      {
+        "name": "Royals",
+        "playcount": 21767300,
+        "listeners": 2086475,
+        "rank": 1
+      },
+      {
+        "name": "Ribs",
+        "playcount": 35362639,
+        "listeners": 1832653,
+        "rank": 2
+      },
+      {
+        "name": "Team",
+        "playcount": 20931760,
+        "listeners": 1744927,
+        "rank": 3
+      },
+      {
+        "name": "Tennis Court",
+        "playcount": 14565832,
+        "listeners": 1230167,
+        "rank": 4
+      },
+      {
+        "name": "Green Light",
+        "playcount": 21083396,
+        "listeners": 1215166,
+        "rank": 5
+      },
+      {
+        "name": "Buzzcut Season",
+        "playcount": 18236402,
+        "listeners": 1214002,
+        "rank": 6
+      },
+      {
+        "name": "Liability",
+        "playcount": 18977980,
+        "listeners": 1106317,
+        "rank": 7
+      },
+      {
+        "name": "Supercut",
+        "playcount": 22280544,
+        "listeners": 1097908,
+        "rank": 8
+      },
+      {
+        "name": "Perfect Places",
+        "playcount": 16760407,
+        "listeners": 928708,
+        "rank": 9
+      },
+      {
+        "name": "400 Lux",
+        "playcount": 11586474,
+        "listeners": 923690,
+        "rank": 10
+      }
+    ],
+    "similar_artists": [
+      {
+        "name": "Addison Rae",
+        "match": 1.0
+      },
+      {
+        "name": "Charli xcx",
+        "match": 0.923678
+      },
+      {
+        "name": "Sky Ferreira",
+        "match": 0.92262
+      },
+      {
+        "name": "Caroline Polachek",
+        "match": 0.899577
+      },
+      {
+        "name": "ROSAL\u00cdA",
+        "match": 0.794731
+      },
+      {
+        "name": "Troye Sivan",
+        "match": 0.789057
+      },
+      {
+        "name": "Lana Del Rey",
+        "match": 0.773833
+      },
+      {
+        "name": "Audrey Hobert",
+        "match": 0.750563
+      },
+      {
+        "name": "HAIM",
+        "match": 0.749762
+      },
+      {
+        "name": "Chappell Roan",
+        "match": 0.735045
+      }
+    ]
+  },
+  "Post Malone": {
+    "name": "Post Malone",
+    "listeners": 3563397,
+    "playcount": 334900371,
+    "url": "https://www.last.fm/music/Post+Malone",
+    "tags": [
+      {
+        "name": "hip-hop",
+        "count": 100
+      },
+      {
+        "name": "rap",
+        "count": 84
+      },
+      {
+        "name": "trap",
+        "count": 40
+      },
+      {
+        "name": "cloud rap",
+        "count": 37
+      },
+      {
+        "name": "pop",
+        "count": 17
+      },
+      {
+        "name": "hip hop",
+        "count": 14
+      },
+      {
+        "name": "country",
+        "count": 10
+      },
+      {
+        "name": "rnb",
+        "count": 2
+      },
+      {
+        "name": "pop rap",
+        "count": 2
+      },
+      {
+        "name": "american",
+        "count": 2
+      }
+    ],
+    "top_tracks": [
+      {
+        "name": "Sunflower - Spider-Man: Into the Spider-Verse",
+        "playcount": 26370262,
+        "listeners": 1786412,
+        "rank": 1
+      },
+      {
+        "name": "Circles",
+        "playcount": 22185057,
+        "listeners": 1530100,
+        "rank": 2
+      },
+      {
+        "name": "rockstar (feat. 21 Savage)",
+        "playcount": 13166202,
+        "listeners": 1226124,
+        "rank": 3
+      },
+      {
+        "name": "Congratulations",
+        "playcount": 11214395,
+        "listeners": 1119462,
+        "rank": 4
+      },
+      {
+        "name": "Better Now",
+        "playcount": 12673760,
+        "listeners": 1089007,
+        "rank": 5
+      },
+      {
+        "name": "Wow.",
+        "playcount": 10602735,
+        "listeners": 937606,
+        "rank": 6
+      },
+      {
+        "name": "White Iverson",
+        "playcount": 8908380,
+        "listeners": 853183,
+        "rank": 7
+      },
+      {
+        "name": "I Like You (A Happier Song) (with Doja Cat)",
+        "playcount": 8069268,
+        "listeners": 764311,
+        "rank": 8
+      },
+      {
+        "name": "I Fall Apart",
+        "playcount": 7794527,
+        "listeners": 742861,
+        "rank": 9
+      },
+      {
+        "name": "Psycho (feat. Ty Dolla $ign)",
+        "playcount": 7655981,
+        "listeners": 734683,
+        "rank": 10
+      }
+    ],
+    "similar_artists": [
+      {
+        "name": "Tyla Yaweh",
+        "match": 1.0
+      },
+      {
+        "name": "The Kid LAROI",
+        "match": 0.851177
+      },
+      {
+        "name": "24kGoldn",
+        "match": 0.614431
+      },
+      {
+        "name": "iann dior",
+        "match": 0.596109
+      },
+      {
+        "name": "G-Eazy",
+        "match": 0.565256
+      },
+      {
+        "name": "Jelly Roll",
+        "match": 0.548548
+      },
+      {
+        "name": "Shaboozey",
+        "match": 0.539899
+      },
+      {
+        "name": "Jack Harlow",
+        "match": 0.521545
+      },
+      {
+        "name": "Lil Nas X",
+        "match": 0.513498
+      },
+      {
+        "name": "Lil Skies",
+        "match": 0.506473
+      }
+    ]
+  },
+  "J. Cole": {
+    "name": "J. Cole",
+    "listeners": 3873749,
+    "playcount": 311199238,
+    "url": "https://www.last.fm/music/J.+Cole",
+    "tags": [
+      {
+        "name": "hip-hop",
+        "count": 100
+      },
+      {
+        "name": "rap",
+        "count": 69
+      },
+      {
+        "name": "hip hop",
+        "count": 18
+      },
+      {
+        "name": "north carolina",
+        "count": 14
+      },
+      {
+        "name": "underground hip-hop",
+        "count": 7
+      },
+      {
+        "name": "jazz hop",
+        "count": 6
+      },
+      {
+        "name": "j cole",
+        "count": 3
+      },
+      {
+        "name": "american",
+        "count": 1
+      },
+      {
+        "name": "underground rap",
+        "count": 1
+      },
+      {
+        "name": "conscious hip hop",
+        "count": 1
+      }
+    ],
+    "top_tracks": [
+      {
+        "name": "No Role Modelz",
+        "playcount": 26180710,
+        "listeners": 1664637,
+        "rank": 1
+      },
+      {
+        "name": "Wet Dreamz",
+        "playcount": 16817351,
+        "listeners": 1252307,
+        "rank": 2
+      },
+      {
+        "name": "Work Out",
+        "playcount": 11339227,
+        "listeners": 1145255,
+        "rank": 3
+      },
+      {
+        "name": "MIDDLE CHILD",
+        "playcount": 11141471,
+        "listeners": 898300,
+        "rank": 4
+      },
+      {
+        "name": "She Knows (feat. Amber Coffman & Cults)",
+        "playcount": 6837702,
+        "listeners": 712167,
+        "rank": 5
+      },
+      {
+        "name": "Power Trip (feat. Miguel)",
+        "playcount": 8568479,
+        "listeners": 697165,
+        "rank": 6
+      },
+      {
+        "name": "m y . l i f e (with 21 Savage & Morray)",
+        "playcount": 9532834,
+        "listeners": 657132,
+        "rank": 7
+      },
+      {
+        "name": "Love Yourz",
+        "playcount": 7508620,
+        "listeners": 632058,
+        "rank": 8
+      },
+      {
+        "name": "Lights Please",
+        "playcount": 2537688,
+        "listeners": 600735,
+        "rank": 9
+      },
+      {
+        "name": "Neighbors",
+        "playcount": 5752566,
+        "listeners": 539130,
+        "rank": 10
+      }
+    ],
+    "similar_artists": [
+      {
+        "name": "Bas",
+        "match": 1.0
+      },
+      {
+        "name": "Dreamville",
+        "match": 0.972137
+      },
+      {
+        "name": "Cozz",
+        "match": 0.922658
+      },
+      {
+        "name": "JID",
+        "match": 0.876389
+      },
+      {
+        "name": "Joey Bada$$",
+        "match": 0.795906
+      },
+      {
+        "name": "Cordae",
+        "match": 0.732263
+      },
+      {
+        "name": "Baby Keem",
+        "match": 0.719522
+      },
+      {
+        "name": "Lute",
+        "match": 0.68453
+      },
+      {
+        "name": "A$AP Rocky",
+        "match": 0.632789
+      },
+      {
+        "name": "Kendrick Lamar",
+        "match": 0.593974
+      }
+    ]
+  }
+}
