@@ -103,7 +103,9 @@ def main():
 
         pm = results.get("product_metrics", {})
         if pm:
-            print(f"\n  Artist Health Score (AHS): {pm.get('afhs', 'N/A')}")
+            ahs = pm.get('afhs', 'N/A')
+            ahs_fmt = f"{ahs:.4f}" if isinstance(ahs, float) else ahs
+            print(f"\n  Artist Health Score (AHS): {ahs_fmt}")
             print(f"  Adversarial Robustness:    {pm.get('ari', {}).get('ari', 'N/A')}")
             print(f"  Fairness Parity:           {pm.get('fps', {}).get('fps', 'N/A')}")
             print(f"  Style Transfer Quality:    {pm.get('mean_stq', 'N/A')}")
