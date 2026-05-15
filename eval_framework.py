@@ -1,14 +1,13 @@
 """
 Evaluation framework for generative music systems.
 
-Provides the experimental infrastructure a Data Scientist at Spotify's
-Artist-First AI Music Lab would use to:
+Provides the experimental infrastructure a Data Scientist would use to:
 
-  1. A/B test framework      — power analysis, metric sensitivity, MDE calculation
-  2. Causal inference stub   — DiD estimator for observational rollouts
-  3. Generative quality rubric — multi-axis evaluation of music generation outputs
-  4. Fairness audit          — disparate impact and representation analysis
-  5. Ecosystem impact model  — estimate listener × artist value exchange
+  1. A/B test framework       -  power analysis, metric sensitivity, MDE calculation
+  2. Causal inference stub    -  DiD estimator for observational rollouts
+  3. Generative quality rubric  -  multi-axis evaluation of music generation outputs
+  4. Fairness audit           -  disparate impact and representation analysis
+  5. Ecosystem impact model   -  estimate listener × artist value exchange
 
 All statistical methods use standard frequentist + Bayesian approaches.
 """
@@ -54,9 +53,8 @@ def compute_sample_size(config: ABTestConfig) -> dict:
         )) ** 2 / (p1 - p2) ** 2
     )
 
-    # Runtime given Spotify's DAU
-    SPOTIFY_DAU = 25_000_000  # ~25M DAU eligible for music gen features
-    runtime_days = math.ceil((n_per_variant * 2) / SPOTIFY_DAU)
+    DAU_SCALE = 25_000_000  # ~25M DAU eligible for music gen features
+    runtime_days = math.ceil((n_per_variant * 2) / DAU_SCALE)
 
     return {
         "metric": config.metric_name,
@@ -65,7 +63,7 @@ def compute_sample_size(config: ABTestConfig) -> dict:
         "mde_relative": f"{config.mde:+.1%}",
         "n_per_variant": n_per_variant,
         "total_n": n_per_variant * 2,
-        "runtime_days_at_spotify_scale": runtime_days,
+        "runtime_days_at_scale": runtime_days,
         "alpha": config.alpha,
         "power": config.power,
     }
@@ -74,7 +72,7 @@ def compute_sample_size(config: ABTestConfig) -> dict:
 def design_generative_music_ab_test() -> list[dict]:
     """
     Design A/B tests for a hypothetical AI-generated playlist feature.
-    Metrics align with what Spotify tracks for generative experiences.
+    Metrics designed for generative music platform evaluation.
     """
     configs = [
         ABTestConfig(
@@ -116,7 +114,7 @@ def design_generative_music_ab_test() -> list[dict]:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 2. CAUSAL INFERENCE — DiD ESTIMATOR
+# 2. CAUSAL INFERENCE  -  DiD ESTIMATOR
 # ─────────────────────────────────────────────────────────────────────────────
 
 def difference_in_differences(
@@ -267,7 +265,7 @@ def ecosystem_impact_estimate(
 ) -> dict:
     """
     Estimate the financial and ecosystem impact of adversarial identity attacks
-    at Spotify scale.
+    at platform scale.
 
     If an adversarial attack redirects listener engagement from artist A to
     artist B (by spoofing A's style in a generative model), the royalty
@@ -300,7 +298,7 @@ def ecosystem_impact_estimate(
 def main():
     print("=" * 65)
     print("GENERATIVE MUSIC EVALUATION FRAMEWORK")
-    print("Spotify Artist-First AI Music Lab")
+    print("Adversarial Music Evaluation System")
     print("=" * 65)
 
     # A/B test designs
@@ -308,7 +306,7 @@ def main():
     ab_results = design_generative_music_ab_test()
     for r in ab_results:
         print(f"  {r['metric']:35s}  n={r['n_per_variant']:>8,}  "
-              f"runtime={r['runtime_days_at_spotify_scale']}d  "
+              f"runtime={r['runtime_days_at_scale']}d  "
               f"MDE={r['mde_relative']}")
 
     # Simulated DiD

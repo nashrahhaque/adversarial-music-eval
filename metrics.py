@@ -2,17 +2,17 @@
 Success metrics framework for generative music systems.
 
 Defines the measurement layer that a Data Scientist would own end-to-end
-for Spotify's Artist-First AI Music Lab. Covers:
+for an adversarial music evaluation system. Covers:
 
-  1. Artist DNA Preservation Score (ADPS)   — does generation stay true to
+  1. Artist DNA Preservation Score (ADPS)    -  does generation stay true to
      the source artist's identity?
-  2. Style Transfer Quality (STQ)           — how faithfully does the model
+  2. Style Transfer Quality (STQ)            -  how faithfully does the model
      transfer a style while remaining imperceptible?
-  3. Adversarial Robustness Index (ARI)     — how resilient is the system
+  3. Adversarial Robustness Index (ARI)      -  how resilient is the system
      to identity-spoofing attacks?
-  4. Fairness Parity Score (FPS)            — are all artists (across genre,
+  4. Fairness Parity Score (FPS)             -  are all artists (across genre,
      listener-base size) protected equally?
-  5. Artist-First Health Score (AFHS)       — composite metric for dashboards,
+  5. Artist Health Score (AHS)               -  composite metric for dashboards,
      weighting detection, fairness, and generation quality equally.
 
 All metrics return values in [0, 1] where 1 is best unless noted.
@@ -62,7 +62,7 @@ def style_transfer_quality(
     )
     # Use L2 norm vs theoretical max L2 budget for imperceptibility.
     # L∞ saturates at ε by design; L2 captures how CONCENTRATED the
-    # perturbation is — a sparse attack is less perceptible than a dense one.
+    # perturbation is  -  a sparse attack is less perceptible than a dense one.
     dim = len(delta_vec)
     l2_max = epsilon * math.sqrt(dim)  # L∞-ball inscribes this L2 sphere
     l2_actual = float(np.linalg.norm(delta_vec))
@@ -153,7 +153,7 @@ def fairness_parity_score(
     }
 
 
-# ── 5. Artist-First Health Score (composite) ──────────────────────────────────
+# ── 5. Artist Health Score (composite) ───────────────────────────────────────
 
 def artist_first_health_score(
     ari: float,
@@ -164,7 +164,7 @@ def artist_first_health_score(
     """
     Composite dashboard metric combining robustness, fairness, and quality.
 
-    Weights reflect Spotify's artist-first principles:
+    Weights reflect artist-identity-first principles:
       - Robustness (ARI) weighted highest: core safety signal
       - Fairness (FPS): equitable protection across artists
       - Style quality (STQ): generation quality guard
@@ -196,7 +196,7 @@ def main():
     per_artist_confidence = {}
 
     print("=" * 60)
-    print("ARTIST-FIRST AI MUSIC LAB — METRICS REPORT")
+    print("ADVERSARIAL MUSIC EVAL  -  METRICS REPORT")
     print("=" * 60)
 
     for pair_key, pair_data in attacks.items():
@@ -242,7 +242,7 @@ def main():
     print(f"  Worst protected:   {fps_result.get('min_protection', 0):.4f}")
     print(f"\nMean Style Transfer Quality (STQ):  {mean_stq:.4f}")
     print(f"\n{'═'*60}")
-    print(f"ARTIST-FIRST HEALTH SCORE (AFHS):   {afhs:.4f}")
+    print(f"ARTIST HEALTH SCORE (AHS):          {afhs:.4f}")
     print(f"  (ARI×0.4 + FPS×0.3 + STQ×0.3)")
     print(f"{'═'*60}")
 

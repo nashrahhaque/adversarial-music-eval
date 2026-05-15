@@ -2,13 +2,13 @@
 Visualization suite for adversarial music evaluation.
 
 Generates publication-quality figures saved to figures/:
-  1. fingerprint_radar.png   — per-artist DNA radar charts
-  2. pca_fingerprints.png    — 2D PCA of the fingerprint space
-  3. similarity_heatmap.png  — pairwise cosine similarity matrix
-  4. attack_trajectories.png — cosine similarity vs iteration for each attack
-  5. detection_summary.png   — z-score distributions: clean vs adversarial
-  6. attribution_bars.png    — which fingerprint regions are most exploited
-  7. metrics_dashboard.png   — composite metrics summary panel
+  1. fingerprint_radar.png    -  per-artist DNA radar charts
+  2. pca_fingerprints.png     -  2D PCA of the fingerprint space
+  3. similarity_heatmap.png   -  pairwise cosine similarity matrix
+  4. attack_trajectories.png  -  cosine similarity vs iteration for each attack
+  5. detection_summary.png    -  z-score distributions: clean vs adversarial
+  6. attribution_bars.png     -  which fingerprint regions are most exploited
+  7. metrics_dashboard.png    -  composite metrics summary panel
 """
 
 import json
@@ -31,8 +31,8 @@ plt.rcParams.update({
     "figure.dpi": 150,
 })
 
-SPOTIFY_GREEN = "#1DB954"
-SPOTIFY_BLACK = "#191414"
+CLEAN_GREEN   = "#1A5C2A"
+DARK_BG       = "#191414"
 ATTACK_RED = "#E53935"
 CLEAN_BLUE = "#1565C0"
 PALETTE = [
@@ -83,7 +83,7 @@ def plot_fingerprint_radar(fp_data: dict):
 
     fig, axes = plt.subplots(2, 5, figsize=(18, 7),
                              subplot_kw={"projection": "polar"})
-    fig.patch.set_facecolor(SPOTIFY_BLACK)
+    fig.patch.set_facecolor(DARK_BG)
     fig.suptitle("Artist DNA Fingerprints", color="white", fontsize=16, fontweight="bold", y=1.01)
 
     angles = np.linspace(0, 2 * math.pi, n_regions, endpoint=False).tolist()
@@ -115,7 +115,7 @@ def plot_fingerprint_radar(fp_data: dict):
 
     plt.tight_layout()
     plt.savefig("figures/fingerprint_radar.png", bbox_inches="tight",
-                facecolor=SPOTIFY_BLACK)
+                facecolor=DARK_BG)
     plt.close()
     print("  Saved figures/fingerprint_radar.png")
 
@@ -314,7 +314,7 @@ def plot_attribution(results: dict):
     scores = [attribution[r] for r in regions]
 
     fig, ax = plt.subplots(figsize=(9, 5))
-    colors = [ATTACK_RED if s == max(scores) else SPOTIFY_GREEN for s in scores]
+    colors = [ATTACK_RED if s == max(scores) else CLEAN_GREEN for s in scores]
     bars = ax.bar(regions, scores, color=colors, edgecolor="white", linewidth=0.5)
     ax.set_ylabel("Mean |z-score| across attacks", fontsize=11)
     ax.set_title("Fingerprint Region Attribution\n"
@@ -363,7 +363,7 @@ def plot_metrics_dashboard(results: dict):
                 fontsize=10, fontweight="bold", color="#333333", wrap=True)
 
     ax1 = fig.add_subplot(gs[0, 0])
-    gauge(ax1, afhs, "Artist-First\nHealth Score", SPOTIFY_GREEN)
+    gauge(ax1, afhs, "Artist\nHealth Score", CLEAN_GREEN)
 
     ax2 = fig.add_subplot(gs[0, 1])
     gauge(ax2, ari.get("ari", 0), "Adversarial\nRobustness (ARI)", CLEAN_BLUE)
@@ -382,7 +382,7 @@ def plot_metrics_dashboard(results: dict):
         bar_vals = [det_metrics.get("precision", 0),
                     det_metrics.get("recall", 0),
                     det_metrics.get("f1", 0)]
-        bars = ax5.bar(bar_labels, bar_vals, color=[CLEAN_BLUE, ATTACK_RED, SPOTIFY_GREEN],
+        bars = ax5.bar(bar_labels, bar_vals, color=[CLEAN_BLUE, ATTACK_RED, CLEAN_GREEN],
                        width=0.5, edgecolor="white")
         ax5.set_ylim(0, 1.1)
         ax5.set_title("Detection Performance", fontsize=11, fontweight="bold")
@@ -403,13 +403,13 @@ def plot_metrics_dashboard(results: dict):
             pd["metrics"].get("absolute_improvement", 0)
             for pd in attacks.values()
         ]
-        colors = [ATTACK_RED if v > 0.1 else SPOTIFY_GREEN for v in improvements]
+        colors = [ATTACK_RED if v > 0.1 else CLEAN_GREEN for v in improvements]
         ax6.barh(pair_labels, improvements, color=colors, edgecolor="white")
         ax6.axvline(0, color="black", linewidth=1)
         ax6.set_xlabel("Cosine Similarity Improvement", fontsize=10)
         ax6.set_title("Attack Effectiveness per Pair", fontsize=11, fontweight="bold")
 
-    fig.suptitle("Adversarial Music Evaluation — Metrics Dashboard",
+    fig.suptitle("Adversarial Music Evaluation  -  Metrics Dashboard",
                  fontsize=14, fontweight="bold", y=1.01)
 
     plt.savefig("figures/metrics_dashboard.png", bbox_inches="tight")

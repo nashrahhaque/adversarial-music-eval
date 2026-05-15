@@ -9,7 +9,7 @@ Example) methodology. The attack finds a perturbation δ such that:
 
 The proxy MLP stands in for a generative music model's encoder/decoder.
 In a real deployment this would attack the latent conditioning vector of
-a system like AudioCraft, MusicGen, or a Spotify-internal model.
+a system like AudioCraft, MusicGen, or a platform-internal generative model.
 
 Hyperparameters (matching SD-MIAE defaults):
     ε  = 0.05   (L∞ budget)

@@ -1,12 +1,11 @@
 """
 Streamlit dashboard for adversarial-music-eval.
 
-Presents the full SD-MIAE pipeline results in an interactive UI
-that Spotify reviewers can explore without running any code.
+Presents the full SD-MIAE pipeline results in an interactive UI.
 
 Deploy to Streamlit Community Cloud:
     1. Push repo to GitHub
-    2. Go to share.streamlit.io → New app → select this file
+    2. Go to share.streamlit.io -> New app -> select this file
     3. Add LASTFM_API_KEY to Secrets if you want live fetching
 
 Or run locally:
@@ -25,27 +24,38 @@ from plotly.subplots import make_subplots
 from sklearn.decomposition import PCA
 from scipy.spatial.distance import cosine as cosine_dist
 
-# ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Adversarial Music Eval",
-    page_icon="🎵",
+    page_icon="",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
-SPOTIFY_GREEN = "#1DB954"
-ATTACK_RED = "#E53935"
-CLEAN_BLUE = "#1565C0"
-BG = "#191414"
-CARD_BG = "#121212"
+# ── Design tokens ─────────────────────────────────────────────────────────────
+T = {
+    "bg":       "#F7F6F3",
+    "ink":      "#141414",
+    "sub":      "#5A5A5A",
+    "rule":     "#D4D0C8",
+    "red":      "#A81C1C",
+    "cobalt":   "#1B3D6B",
+    "amber":    "#7A5C00",
+    "violet":   "#4B2C6E",
+    "green":    "#1A5C2A",
+    "font":     "'Helvetica Neue', Helvetica, Arial, sans-serif",
+    "mono":     "'JetBrains Mono', 'Fira Mono', 'Courier New', monospace",
+}
+
+ATTACK_COLOR = T["red"]
+CLEAN_COLOR  = T["cobalt"]
+PALETTE = [T["cobalt"], T["red"], T["amber"], T["violet"], T["green"],
+           "#8B4513", "#006363", "#5C3A1E", "#2C4A6E", "#6B1A1A"]
 
 ARTISTS = [
     "Taylor Swift", "Drake", "Billie Eilish", "The Weeknd",
     "Kendrick Lamar", "Olivia Rodrigo", "21 Savage", "Lorde",
     "Post Malone", "J. Cole",
 ]
-
-PALETTE = px.colors.qualitative.Plotly
 
 DIM_LAYOUT = {
     "Tags": (0, 30),
@@ -58,34 +68,146 @@ DIM_LAYOUT = {
     "Tag Weights": (49, 54),
 }
 
-# ── CSS ───────────────────────────────────────────────────────────────────────
-st.markdown("""
+# ── Global styles ─────────────────────────────────────────────────────────────
+st.markdown(f"""
 <style>
-    .stApp { background-color: #191414; color: #FFFFFF; }
-    .metric-card {
-        background: #282828;
-        border-radius: 12px;
-        padding: 20px;
-        text-align: center;
-        border: 1px solid #333;
-    }
-    .metric-value { font-size: 2.2rem; font-weight: 700; color: #1DB954; }
-    .metric-label { font-size: 0.85rem; color: #B3B3B3; margin-top: 4px; }
-    .section-header {
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: #FFFFFF;
-        border-bottom: 2px solid #1DB954;
-        padding-bottom: 8px;
-        margin: 24px 0 16px 0;
-    }
-    .attack-pair-card {
-        background: #282828;
-        border-radius: 8px;
-        padding: 16px;
-        margin: 8px 0;
-        border-left: 3px solid #E53935;
-    }
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+  html, body, [class*="css"] {{
+      font-family: {T["font"]};
+      background-color: {T["bg"]};
+      color: {T["ink"]};
+  }}
+  .stApp {{ background-color: {T["bg"]}; }}
+  .block-container {{ padding-top: 2rem; padding-bottom: 3rem; max-width: 1280px; }}
+
+  /* masthead */
+  .masthead {{
+      border-bottom: 2px solid {T["ink"]};
+      padding-bottom: 1.5rem;
+      margin-bottom: 2.5rem;
+  }}
+  .masthead-title {{
+      font-size: clamp(2.4rem, 4vw, 3.8rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: {T["ink"]};
+      margin: 0;
+  }}
+  .masthead-sub {{
+      font-size: 0.82rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: {T["sub"]};
+      margin-top: 0.5rem;
+  }}
+
+  /* section header */
+  .sec-hd {{
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      border-top: 1px solid {T["rule"]};
+      padding-top: 0.6rem;
+      margin: 2rem 0 1rem 0;
+  }}
+  .sec-num {{
+      font-family: {T["mono"]};
+      font-size: 0.72rem;
+      color: {T["sub"]};
+      letter-spacing: 0.1em;
+  }}
+  .sec-title {{
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: {T["ink"]};
+  }}
+
+  /* stat bar */
+  .stat-bar {{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0;
+      border: 1px solid {T["rule"]};
+      margin-bottom: 2rem;
+  }}
+  .stat-cell {{
+      padding: 1.2rem 1.4rem;
+      border-right: 1px solid {T["rule"]};
+  }}
+  .stat-cell:last-child {{ border-right: none; }}
+  .stat-val {{
+      font-family: {T["mono"]};
+      font-size: 2rem;
+      font-weight: 700;
+      color: {T["ink"]};
+      line-height: 1;
+  }}
+  .stat-lbl {{
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: {T["sub"]};
+      margin-top: 0.4rem;
+  }}
+  .stat-note {{
+      font-family: {T["mono"]};
+      font-size: 0.72rem;
+      color: {T["sub"]};
+      margin-top: 0.2rem;
+  }}
+
+  /* tag pill */
+  .pill {{
+      display: inline-block;
+      font-family: {T["mono"]};
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      padding: 0.15rem 0.5rem;
+      border: 1px solid {T["rule"]};
+      color: {T["sub"]};
+      margin: 0.15rem;
+  }}
+
+  /* attack card */
+  .atk-card {{
+      border-left: 3px solid {T["red"]};
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      background: white;
+  }}
+  .atk-card b {{ color: {T["ink"]}; }}
+
+  /* alert */
+  .alert-flag {{
+      display: inline-block;
+      font-family: {T["mono"]};
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.5rem;
+      background: {T["red"]};
+      color: white;
+  }}
+  .ok-flag {{
+      display: inline-block;
+      font-family: {T["mono"]};
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.5rem;
+      border: 1px solid {T["rule"]};
+      color: {T["sub"]};
+  }}
+
+  /* dataframe override */
+  .stDataFrame {{ border: 1px solid {T["rule"]}; }}
+
+  /* hide streamlit chrome */
+  #MainMenu, footer, header {{ visibility: hidden; }}
+  .stDeployButton {{ display: none; }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -97,10 +219,8 @@ def load_data():
     data_dir = pathlib.Path(__file__).parent / "data"
     fp_path = data_dir / "fingerprints.json"
     res_path = data_dir / "results.json"
-
     if not fp_path.exists() or not res_path.exists():
         return None, None
-
     with open(fp_path) as f:
         fp_data = json.load(f)
     with open(res_path) as f:
@@ -108,43 +228,10 @@ def load_data():
     return fp_data, results
 
 
-# ── Sidebar ───────────────────────────────────────────────────────────────────
-
-with st.sidebar:
-    st.image(
-        "https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_White.png",
-        width=130,
-    )
-    st.markdown("## Adversarial Music Eval")
-    st.markdown(
-        "**SD-MIAE** applied to generative music identity protection.\n\n"
-        "Adapted from a published IEEE adversarial-attack methodology to "
-        "detect style-spoofing attacks on artist DNA fingerprints."
-    )
-    st.markdown("---")
-    st.markdown("**Navigation**")
-    page = st.radio(
-        "",
-        ["Overview", "Artist Fingerprints", "Attack Analysis",
-         "Detection Results", "Product Metrics", "Eval Framework"],
-        label_visibility="collapsed",
-    )
-    st.markdown("---")
-    st.markdown(
-        "[GitHub](https://github.com) · "
-        "[IEEE Paper](#) · "
-        "[Run Pipeline](https://github.com)"
-    )
-
-# ── Load ──────────────────────────────────────────────────────────────────────
-
 fp_data, results = load_data()
 
 if fp_data is None:
-    st.error(
-        "No data found. Run `python run_pipeline.py` to generate data/, "
-        "then restart the dashboard."
-    )
+    st.error("No data found. Run `python run_pipeline.py` to generate data/, then restart.")
     st.stop()
 
 fingerprints = fp_data["fingerprints"]
@@ -156,145 +243,200 @@ ef = results.get("eval_framework", {})
 
 artist_vecs = {a: np.array(fingerprints[a]["vector"]) for a in ARTISTS if a in fingerprints}
 
-# ─────────────────────────────────────────────────────────────────────────────
-# PAGE: OVERVIEW
-# ─────────────────────────────────────────────────────────────────────────────
 
-if page == "Overview":
-    st.markdown("# Adversarial Music Evaluation")
+# ── Chart theme helper ────────────────────────────────────────────────────────
+
+def theme(fig, title="", height=380):
+    fig.update_layout(
+        title=dict(text=title, font=dict(size=13, family=T["font"], color=T["ink"]),
+                   x=0, xanchor="left"),
+        paper_bgcolor=T["bg"],
+        plot_bgcolor=T["bg"],
+        font=dict(family=T["font"], color=T["ink"], size=12),
+        xaxis=dict(gridcolor=T["rule"], linecolor=T["rule"], zeroline=False),
+        yaxis=dict(gridcolor=T["rule"], linecolor=T["rule"], zeroline=False),
+        legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor=T["rule"], borderwidth=1),
+        margin=dict(l=40, r=20, t=50, b=40),
+        height=height,
+    )
+    return fig
+
+
+def sec(num, title):
     st.markdown(
-        "An end-to-end research prototype demonstrating how adversarial ML "
-        "methodology protects **artist identity** in AI-powered generative music systems."
+        f'<div class="sec-hd">'
+        f'<span class="sec-num">{num}</span>'
+        f'<span class="sec-title">{title}</span>'
+        f'</div>',
+        unsafe_allow_html=True,
     )
 
-    # Top KPI row
-    c1, c2, c3, c4, c5 = st.columns(5)
-    kpi_pairs = [
-        ("Artist-First Health Score", f"{pm.get('afhs', 0):.3f}", SPOTIFY_GREEN),
-        ("Detection F1", f"{detection.get('metrics', {}).get('f1', 0):.3f}", SPOTIFY_GREEN),
-        ("Robustness (ARI)", f"{pm.get('ari', {}).get('ari', 0):.3f}", CLEAN_BLUE),
-        ("Fairness (FPS)", f"{pm.get('fps', {}).get('fps', 0):.3f}", "#F9A825"),
-        ("Style Quality (STQ)", f"{pm.get('mean_stq', 0):.3f}", "#AB47BC"),
-    ]
-    for col, (label, value, color) in zip([c1, c2, c3, c4, c5], kpi_pairs):
-        col.markdown(
-            f'<div class="metric-card">'
-            f'<div class="metric-value" style="color:{color}">{value}</div>'
-            f'<div class="metric-label">{label}</div>'
-            f'</div>',
-            unsafe_allow_html=True,
+
+def stat_bar(cells):
+    html = '<div class="stat-bar">'
+    for val, lbl, note in cells:
+        html += (
+            f'<div class="stat-cell">'
+            f'<div class="stat-val">{val}</div>'
+            f'<div class="stat-lbl">{lbl}</div>'
+            f'<div class="stat-note">{note}</div>'
+            f'</div>'
         )
+    html += '</div>'
+    st.markdown(html, unsafe_allow_html=True)
 
-    st.markdown("---")
 
-    col_l, col_r = st.columns([2, 1])
+# ── Masthead ──────────────────────────────────────────────────────────────────
+
+st.markdown(
+    '<div class="masthead">'
+    '<h1 class="masthead-title">Adversarial Music Eval</h1>'
+    '<p class="masthead-sub">SD-MIAE applied to generative music identity protection'
+    ' &nbsp;/&nbsp; Last.fm data &nbsp;/&nbsp; IEEE methodology</p>'
+    '</div>',
+    unsafe_allow_html=True,
+)
+
+# ── Tab navigation ────────────────────────────────────────────────────────────
+
+tab_overview, tab_fp, tab_attack, tab_detect, tab_metrics, tab_eval = st.tabs([
+    "01  Overview",
+    "02  Artist Fingerprints",
+    "03  Attack Analysis",
+    "04  Detection",
+    "05  Product Metrics",
+    "06  Eval Framework",
+])
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TAB 01: OVERVIEW
+# ─────────────────────────────────────────────────────────────────────────────
+
+with tab_overview:
+    det_metrics = detection.get("metrics", {})
+    ahs = pm.get("afhs", 0)
+    ari = pm.get("ari", {}).get("ari", 0)
+    fps = pm.get("fps", {}).get("fps", 0)
+    f1  = det_metrics.get("f1", 0)
+    stq = pm.get("mean_stq", 0)
+
+    stat_bar([
+        (f"{ahs:.3f}",  "AHS",          "artist health score"),
+        (f"{f1:.3f}",   "Detection F1", "adversarial recall"),
+        (f"{ari:.3f}",  "ARI",          "robustness index"),
+        (f"{fps:.3f}",  "FPS",          "fairness parity"),
+        (f"{stq:.3f}",  "STQ",          "style quality"),
+    ])
+
+    col_l, col_r = st.columns([3, 2])
 
     with col_l:
-        st.markdown('<div class="section-header">Pipeline Overview</div>', unsafe_allow_html=True)
+        sec("01.1", "Pipeline")
         st.markdown("""
-| Step | Module | What it does |
-|------|--------|-------------|
-| 1 | `fetch_artists.py` | Last.fm API → tags, tracks, listeners for 10 artists |
-| 2 | `fingerprint.py` | 54-dim artist DNA vector (tags · stats · graph) |
-| 3 | `attack.py` | SD-MIAE adversarial attack on 5 artist pairs |
+| Step | Module | Output |
+|------|--------|--------|
+| 1 | `fetch_artists.py` | Last.fm tags, tracks, listeners for 10 artists |
+| 2 | `fingerprint.py` | 54-dim artist DNA vector |
+| 3 | `attack.py` | SD-MIAE adversarial attack on 5 pairs |
 | 4 | `detect.py` | Z-score anomaly detection (threshold = 2.0) |
-| 5 | `metrics.py` | ADPS · STQ · ARI · FPS · AFHS product metrics |
-| 6 | `eval_framework.py` | A/B tests · causal inference · fairness · ecosystem impact |
+| 5 | `metrics.py` | ADPS, STQ, ARI, FPS, AHS |
+| 6 | `eval_framework.py` | A/B tests, causal inference, fairness, ecosystem impact |
         """)
 
+        sec("01.2", "Artist Dataset")
+        try:
+            with open(pathlib.Path(__file__).parent / "data" / "artists.json") as f:
+                artists_raw = json.load(f)
+            df_artists = pd.DataFrame([
+                {
+                    "Artist": a,
+                    "Listeners (M)": round(artists_raw[a].get("listeners", 0) / 1e6, 2),
+                    "Plays (B)": round(artists_raw[a].get("playcount", 0) / 1e9, 2),
+                    "Top Tags": ", ".join(t["name"] for t in artists_raw[a].get("tags", [])[:3]),
+                }
+                for a in ARTISTS if a in artists_raw and "error" not in artists_raw[a]
+            ])
+            fig = go.Figure(go.Bar(
+                x=df_artists["Artist"],
+                y=df_artists["Listeners (M)"],
+                marker_color=T["cobalt"],
+                marker_line_width=0,
+            ))
+            theme(fig, "Monthly Listeners (Last.fm, M)")
+            fig.update_xaxes(tickangle=-30)
+            st.plotly_chart(fig, use_container_width=True)
+        except Exception:
+            st.info("Run the pipeline to load artist data.")
+
     with col_r:
-        st.markdown('<div class="section-header">Attack Pairs</div>', unsafe_allow_html=True)
+        sec("01.3", "Attack Pairs")
         for pair_key, pd_ in attacks.items():
-            sim = pd_["metrics"]["attack_similarity"]
+            sim   = pd_["metrics"]["attack_similarity"]
             delta = pd_["metrics"]["absolute_improvement"]
-            det = pd_.get("detection", {})
-            flag = "⚠️ DETECTED" if det.get("is_adversarial") else "✓ missed"
+            det   = pd_.get("detection", {})
+            flag  = '<span class="alert-flag">detected</span>' if det.get("is_adversarial") \
+                    else '<span class="ok-flag">missed</span>'
             st.markdown(
-                f'<div class="attack-pair-card">'
-                f'<b>{pd_["source"].split()[0]} → {pd_["target"].split()[0]}</b><br>'
-                f'sim={sim:.3f} ({delta:+.3f})  {flag}'
+                f'<div class="atk-card">'
+                f'<b>{pd_["source"].split()[0]} &rarr; {pd_["target"].split()[0]}</b><br>'
+                f'<span style="font-family:{T["mono"]};font-size:0.8rem;color:{T["sub"]}">'
+                f'sim={sim:.3f} ({delta:+.3f})</span>&nbsp;&nbsp;{flag}'
                 f'</div>',
                 unsafe_allow_html=True,
             )
 
-    # Artist listener breakdown
-    st.markdown('<div class="section-header">Artist Dataset</div>', unsafe_allow_html=True)
-    with open(pathlib.Path(__file__).parent / "data" / "artists.json") as f:
-        artists_raw = json.load(f)
-
-    df_artists = pd.DataFrame([
-        {
-            "Artist": a,
-            "Listeners": artists_raw[a].get("listeners", 0),
-            "Playcount": artists_raw[a].get("playcount", 0),
-            "Top Tags": ", ".join(t["name"] for t in artists_raw[a].get("tags", [])[:3]),
-        }
-        for a in ARTISTS if a in artists_raw and "error" not in artists_raw[a]
-    ])
-    df_artists["Listeners (M)"] = (df_artists["Listeners"] / 1e6).round(2)
-    df_artists["Plays (B)"] = (df_artists["Playcount"] / 1e9).round(2)
-
-    fig = px.bar(
-        df_artists, x="Artist", y="Listeners (M)",
-        color="Listeners (M)", color_continuous_scale="Greens",
-        title="Monthly Listeners (Last.fm)",
-        template="plotly_dark",
-    )
-    fig.update_layout(showlegend=False, paper_bgcolor=CARD_BG, plot_bgcolor=CARD_BG,
-                      coloraxis_showscale=False)
-    st.plotly_chart(fig, use_container_width=True)
-
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PAGE: ARTIST FINGERPRINTS
+# TAB 02: ARTIST FINGERPRINTS
 # ─────────────────────────────────────────────────────────────────────────────
 
-elif page == "Artist Fingerprints":
-    st.markdown("# Artist DNA Fingerprints")
+with tab_fp:
     st.markdown(
-        "Each artist is encoded as a **54-dimensional vector** derived from Last.fm data. "
-        "The fingerprint acts as the conditioning vector for a generative music model."
+        "Each artist encoded as a **54-dimensional vector** from Last.fm data. "
+        "The fingerprint acts as the conditioning vector a generative model uses "
+        "to steer musical style."
     )
 
-    tab1, tab2, tab3 = st.tabs(["Radar Charts", "PCA Space", "Similarity Heatmap"])
+    sub1, sub2, sub3 = st.tabs(["Radar Charts", "PCA Space", "Similarity Heatmap"])
 
-    with tab1:
-        selected = st.multiselect(
-            "Select artists to compare",
-            ARTISTS,
-            default=ARTISTS[:4],
-        )
+    with sub1:
+        sec("02.1", "Artist DNA Radar")
+        selected = st.multiselect("Select artists", ARTISTS, default=ARTISTS[:4])
         if selected:
             regions = list(DIM_LAYOUT.keys())
             fig = go.Figure()
             for i, artist in enumerate(selected):
                 if artist not in artist_vecs:
                     continue
-                vec = artist_vecs[artist]
+                vec  = artist_vecs[artist]
                 vals = [float(vec[s:e].mean()) for s, e in DIM_LAYOUT.values()]
                 vals += vals[:1]
-                angles = [r for r in regions] + [regions[0]]
+                angles = regions + [regions[0]]
                 fig.add_trace(go.Scatterpolar(
-                    r=vals,
-                    theta=angles,
-                    fill="toself",
-                    name=artist,
-                    opacity=0.7,
+                    r=vals, theta=angles, fill="toself", name=artist,
+                    opacity=0.65,
                     line=dict(color=PALETTE[i % len(PALETTE)], width=2),
                 ))
             fig.update_layout(
-                polar=dict(radialaxis=dict(visible=True, range=[0, 1])),
-                showlegend=True,
-                title="Artist DNA Radar (per region mean)",
-                template="plotly_dark",
-                paper_bgcolor=CARD_BG,
+                polar=dict(
+                    radialaxis=dict(visible=True, range=[0, 1],
+                                    gridcolor=T["rule"], linecolor=T["rule"]),
+                    angularaxis=dict(gridcolor=T["rule"], linecolor=T["rule"]),
+                    bgcolor=T["bg"],
+                ),
+                paper_bgcolor=T["bg"],
+                font=dict(family=T["font"], color=T["ink"]),
+                legend=dict(bgcolor="rgba(0,0,0,0)"),
+                title=dict(text="Per-region mean (normalized)", font=dict(size=12), x=0),
+                height=420,
+                margin=dict(l=20, r=20, t=50, b=20),
             )
             st.plotly_chart(fig, use_container_width=True)
 
-        # Fingerprint dim layout table
-        st.markdown("#### 54-Dimension Layout")
+        sec("02.2", "54-Dimension Layout")
         dim_df = pd.DataFrame([
-            {"Dims": f"{s}–{e-1}", "Region": region, "Description": desc}
+            {"Dims": f"{s}-{e-1}", "Region": region, "Description": desc}
             for (region, (s, e)), desc in zip(
                 DIM_LAYOUT.items(),
                 [
@@ -302,7 +444,7 @@ elif page == "Artist Fingerprints":
                     "Log-normalized monthly listener count",
                     "Log-normalized total play count",
                     "Plays-per-listener ratio, normalized",
-                    "Unique tag breadth (0–1)",
+                    "Unique tag breadth (0-1)",
                     "Similarity scores to each of the 10 canonical artists",
                     "Track play/listener stats, log-normalized",
                     "Tag weight distribution statistics",
@@ -311,25 +453,25 @@ elif page == "Artist Fingerprints":
         ])
         st.dataframe(dim_df, use_container_width=True, hide_index=True)
 
-    with tab2:
-        names = list(artist_vecs.keys())
-        vecs = np.array([artist_vecs[a] for a in names])
-        pca = PCA(n_components=2, random_state=42)
+    with sub2:
+        sec("02.3", "Fingerprint PCA Space")
+        names  = list(artist_vecs.keys())
+        vecs   = np.array([artist_vecs[a] for a in names])
+        pca    = PCA(n_components=2, random_state=42)
         coords = pca.fit_transform(vecs)
         var_exp = pca.explained_variance_ratio_
 
         fig = go.Figure()
         for i, (name, (x, y)) in enumerate(zip(names, coords)):
             fig.add_trace(go.Scatter(
-                x=[x], y=[y],
-                mode="markers+text",
-                marker=dict(size=16, color=PALETTE[i % len(PALETTE)]),
-                text=[name.split()[0]],
-                textposition="top center",
-                name=name,
+                x=[x], y=[y], mode="markers+text",
+                marker=dict(size=14, color=PALETTE[i % len(PALETTE)],
+                            line=dict(width=1, color=T["ink"])),
+                text=[name.split()[0]], textposition="top center",
+                textfont=dict(size=11, color=T["ink"]),
+                name=name, showlegend=False,
             ))
 
-        # Attack arrows
         for _, pd_ in attacks.items():
             src, tgt = pd_["source"], pd_["target"]
             if src in names and tgt in names:
@@ -338,451 +480,403 @@ elif page == "Artist Fingerprints":
                     x=coords[ti][0], y=coords[ti][1],
                     ax=coords[si][0], ay=coords[si][1],
                     xref="x", yref="y", axref="x", ayref="y",
-                    arrowhead=3, arrowcolor=ATTACK_RED,
-                    arrowwidth=2, arrowsize=1.2,
+                    arrowhead=3, arrowcolor=T["red"], arrowwidth=1.5, arrowsize=1.1,
                 )
 
-        fig.update_layout(
-            xaxis_title=f"PC1 ({var_exp[0]:.1%} var)",
-            yaxis_title=f"PC2 ({var_exp[1]:.1%} var)",
-            title="Fingerprint PCA Space — red arrows = attack direction",
-            template="plotly_dark",
-            paper_bgcolor=CARD_BG,
-            showlegend=False,
-        )
+        theme(fig, f"PC1 ({var_exp[0]:.1%} var) x PC2 ({var_exp[1]:.1%} var) -- red arrows = attack direction")
         st.plotly_chart(fig, use_container_width=True)
 
-    with tab3:
-        names = list(artist_vecs.keys())
-        vecs = np.array([artist_vecs[a] for a in names])
+    with sub3:
+        sec("02.4", "Pairwise Cosine Similarity")
+        names   = list(artist_vecs.keys())
+        vecs    = np.array([artist_vecs[a] for a in names])
         sim_mat = np.array([
             [1.0 - cosine_dist(vecs[i], vecs[j]) for j in range(len(names))]
             for i in range(len(names))
         ])
-        short = [n.split()[0] for n in names]
+        short_names = [n.split()[0] for n in names]
         fig = px.imshow(
-            sim_mat,
-            x=short, y=short,
-            color_continuous_scale="RdYlGn",
-            zmin=0, zmax=1,
-            text_auto=".2f",
-            title="Pairwise Cosine Similarity",
-            template="plotly_dark",
+            sim_mat, x=short_names, y=short_names,
+            color_continuous_scale=[[0, "#F7F6F3"], [0.5, T["cobalt"]], [1, T["ink"]]],
+            zmin=0, zmax=1, text_auto=".2f",
         )
-        fig.update_layout(paper_bgcolor=CARD_BG)
+        fig.update_layout(
+            paper_bgcolor=T["bg"], plot_bgcolor=T["bg"],
+            font=dict(family=T["font"], color=T["ink"]),
+            coloraxis_colorbar=dict(tickfont=dict(color=T["ink"])),
+            height=420, margin=dict(l=10, r=10, t=20, b=10),
+        )
         st.plotly_chart(fig, use_container_width=True)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PAGE: ATTACK ANALYSIS
+# TAB 03: ATTACK ANALYSIS
 # ─────────────────────────────────────────────────────────────────────────────
 
-elif page == "Attack Analysis":
-    st.markdown("# SD-MIAE Attack Analysis")
+with tab_attack:
     st.markdown(
         "Momentum-integrated sign-gradient attack adapted from the IEEE SD-MIAE paper. "
-        "Finds δ such that `model(source + δ) ≈ model(target)` with `‖δ‖∞ ≤ 0.05`."
+        "Finds delta such that `model(source + delta) approx model(target)` "
+        "with `||delta||_inf <= 0.05`."
     )
 
-    # Hyperparams banner
     cfg = results.get("config", {})
-    c1, c2, c3, c4 = st.columns(4)
-    for col, (k, v) in zip([c1, c2, c3, c4], [("ε (budget)", cfg.get("epsilon")),
-                                                 ("μ (momentum)", cfg.get("mu")),
-                                                 ("α (step size)", cfg.get("alpha")),
-                                                 ("T (steps)", cfg.get("steps"))]):
-        col.metric(k, v)
+    stat_bar([
+        (str(cfg.get("epsilon", "-")), "epsilon (budget)",   "L-inf constraint"),
+        (str(cfg.get("mu", "-")),      "mu (momentum)",      "gradient decay"),
+        (str(cfg.get("alpha", "-")),   "alpha (step size)",  "per-iteration"),
+        (str(cfg.get("steps", "-")),   "T (steps)",          "iterations"),
+    ])
 
-    st.markdown("---")
-
-    # Convergence trajectories
-    st.markdown("#### Convergence Trajectories")
+    sec("03.1", "Convergence Trajectories")
     fig = go.Figure()
     for i, (pair_key, pd_) in enumerate(attacks.items()):
-        history = pd_.get("history", [])
+        history  = pd_.get("history", [])
         if not history:
             continue
-        steps = [h["step"] for h in history]
-        sims = [h["cosine_similarity"] for h in history]
+        steps    = [h["step"] for h in history]
+        sims     = [h["cosine_similarity"] for h in history]
         baseline = history[0]["src_tgt_baseline"]
-        label = f"{pd_['source'].split()[0]} → {pd_['target'].split()[0]}"
+        label    = f"{pd_['source'].split()[0]} -> {pd_['target'].split()[0]}"
         fig.add_trace(go.Scatter(
-            x=steps, y=sims,
-            mode="lines+markers",
-            name=label,
+            x=steps, y=sims, mode="lines+markers", name=label,
             line=dict(color=PALETTE[i % len(PALETTE)], width=2),
             marker=dict(size=4),
         ))
         fig.add_hline(
             y=baseline, line_dash="dot",
-            line_color=PALETTE[i % len(PALETTE)],
-            opacity=0.4,
+            line_color=PALETTE[i % len(PALETTE)], opacity=0.35,
             annotation_text=f"baseline {label[:5]}",
-            annotation_position="right",
+            annotation_font_color=T["sub"], annotation_font_size=10,
         )
-    fig.update_layout(
-        xaxis_title="Attack Iteration",
-        yaxis_title="Cosine Similarity (adv → target)",
-        title="SD-MIAE Convergence (dotted = pre-attack baseline)",
-        template="plotly_dark",
-        paper_bgcolor=CARD_BG,
-        yaxis=dict(range=[0, 1.05]),
-    )
+    fig.update_yaxes(range=[0, 1.05])
+    theme(fig, "Cosine similarity (adversarial -> target) over attack iterations")
+    fig.update_xaxes(title_text="Attack iteration")
+    fig.update_yaxes(title_text="Cosine similarity")
     st.plotly_chart(fig, use_container_width=True)
 
-    # Per-pair results table
-    st.markdown("#### Per-Pair Results")
+    sec("03.2", "Per-Pair Results")
     rows = []
     for pair_key, pd_ in attacks.items():
-        m = pd_["metrics"]
+        m   = pd_["metrics"]
         det = pd_.get("detection", {})
         rows.append({
-            "Pair": pair_key,
-            "Baseline Sim": round(m["baseline_similarity"], 4),
-            "Attack Sim": round(m["attack_similarity"], 4),
-            "Improvement": f"{m['absolute_improvement']:+.4f}",
-            "‖δ‖∞": round(m["delta_linf"], 4),
-            "‖δ‖₂": round(m["delta_l2"], 4),
-            "Constraint ✓": "✓" if m["constraint_satisfied"] else "✗",
-            "Detected": "⚠️ YES" if det.get("is_adversarial") else "✗ NO",
-            "Confidence": round(det.get("confidence", 0), 3),
+            "Pair":          pair_key,
+            "Baseline sim":  round(m["baseline_similarity"], 4),
+            "Attack sim":    round(m["attack_similarity"], 4),
+            "Improvement":   f"{m['absolute_improvement']:+.4f}",
+            "||delta||_inf": round(m["delta_linf"], 4),
+            "||delta||_2":   round(m["delta_l2"], 4),
+            "Constraint":    "pass" if m["constraint_satisfied"] else "FAIL",
+            "Detected":      "YES" if det.get("is_adversarial") else "no",
+            "Confidence":    round(det.get("confidence", 0), 3),
         })
-    df = pd.DataFrame(rows)
-    st.dataframe(df, use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
 
-    # Delta distribution
-    st.markdown("#### Perturbation Distribution (δ per dimension)")
-    pair_sel = st.selectbox("Select attack pair", list(attacks.keys()))
+    sec("03.3", "Perturbation Distribution")
+    pair_sel = st.selectbox("Attack pair", list(attacks.keys()), key="atk_sel")
     if pair_sel in attacks:
-        delta = np.array(attacks[pair_sel]["delta"])
+        delta_vec = np.array(attacks[pair_sel]["delta"])
         fig = go.Figure()
         fig.add_trace(go.Bar(
-            x=list(range(len(delta))),
-            y=delta,
-            marker_color=[ATTACK_RED if d > 0 else CLEAN_BLUE for d in delta],
-            name="δ",
+            x=list(range(len(delta_vec))),
+            y=delta_vec,
+            marker_color=[T["red"] if d > 0 else T["cobalt"] for d in delta_vec],
+            marker_line_width=0,
+            name="delta",
         ))
-        fig.add_hline(y=cfg.get("epsilon", 0.05), line_dash="dash",
-                      line_color="white", annotation_text="+ε")
+        fig.add_hline(y= cfg.get("epsilon", 0.05), line_dash="dash",
+                      line_color=T["sub"], annotation_text="+eps",
+                      annotation_font_color=T["sub"])
         fig.add_hline(y=-cfg.get("epsilon", 0.05), line_dash="dash",
-                      line_color="white", annotation_text="-ε")
-        # Region dividers
+                      line_color=T["sub"], annotation_text="-eps",
+                      annotation_font_color=T["sub"])
         for region, (s, e) in DIM_LAYOUT.items():
-            fig.add_vrect(x0=s, x1=e, fillcolor="white", opacity=0.03,
+            fig.add_vrect(x0=s, x1=e, fillcolor=T["rule"], opacity=0.3,
                           annotation_text=region[:4], annotation_position="top left",
-                          annotation_font_size=8)
-        fig.update_layout(
-            xaxis_title="Fingerprint Dimension",
-            yaxis_title="Perturbation δ",
-            title=f"Perturbation Vector: {pair_sel}",
-            template="plotly_dark",
-            paper_bgcolor=CARD_BG,
-        )
+                          annotation_font_size=8, annotation_font_color=T["sub"])
+        theme(fig, f"Perturbation vector: {pair_sel}")
+        fig.update_xaxes(title_text="Fingerprint dimension")
+        fig.update_yaxes(title_text="Perturbation delta")
         st.plotly_chart(fig, use_container_width=True)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PAGE: DETECTION RESULTS
+# TAB 04: DETECTION
 # ─────────────────────────────────────────────────────────────────────────────
 
-elif page == "Detection Results":
-    st.markdown("# Statistical Anomaly Detection")
+with tab_detect:
+    det_metrics = detection.get("metrics", {})
+    threshold   = detection.get("threshold", 2.0)
+
     st.markdown(
-        "Z-score deviation from clean embedding distribution. "
-        f"**Threshold = {detection.get('threshold', 2.0)}**. "
+        f"Z-score deviation from clean embedding distribution. "
+        f"**Threshold = {threshold}.** "
         "Embedding flagged as adversarial if `mean |z| > threshold`."
     )
 
-    det_metrics = detection.get("metrics", {})
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Precision", det_metrics.get("precision", 0))
-    c2.metric("Recall", det_metrics.get("recall", 0))
-    c3.metric("F1", det_metrics.get("f1", 0))
-    c4.metric("AUROC", det_metrics.get("auroc", 0))
+    stat_bar([
+        (str(det_metrics.get("precision", "-")), "Precision", ""),
+        (str(det_metrics.get("recall", "-")),    "Recall",    ""),
+        (str(det_metrics.get("f1", "-")),        "F1",        ""),
+        (str(det_metrics.get("auroc", "-")),     "AUROC",     ""),
+    ])
 
-    st.markdown("---")
     col_l, col_r = st.columns(2)
 
+    clean_data = detection.get("clean_embeddings", {})
+
     with col_l:
-        st.markdown("#### Clean Embeddings")
-        clean_data = detection.get("clean_embeddings", {})
+        sec("04.1", "Clean Embeddings")
         clean_rows = [
             {"Artist": a, "Mean |z|": round(v["mean_z_score"], 3),
              "Max |z|": round(v["max_z_score"], 3),
-             "Status": "✓ Clean" if not v["is_adversarial"] else "⚠️ Flagged"}
+             "Status": "clean" if not v["is_adversarial"] else "FLAGGED"}
             for a, v in clean_data.items()
         ]
-        df_clean = pd.DataFrame(clean_rows)
-        st.dataframe(df_clean, use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(clean_rows), use_container_width=True, hide_index=True)
 
     with col_r:
-        st.markdown("#### Adversarial Embeddings")
+        sec("04.2", "Adversarial Embeddings")
         adv_rows = [
             {"Pair": k,
              "Mean |z|": round(v["detection"]["mean_z_score"], 3),
              "Confidence": round(v["detection"].get("confidence", 0), 3),
-             "Status": "⚠️ DETECTED" if v["detection"]["is_adversarial"] else "✗ Missed"}
+             "Status": "DETECTED" if v["detection"]["is_adversarial"] else "missed"}
             for k, v in attacks.items() if "detection" in v
         ]
-        df_adv = pd.DataFrame(adv_rows)
-        st.dataframe(df_adv, use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(adv_rows), use_container_width=True, hide_index=True)
 
-    # Z-score distribution comparison
+    sec("04.3", "Z-Score Distribution")
     clean_zs = [v["mean_z_score"] for v in clean_data.values()]
-    adv_zs = [v["detection"]["mean_z_score"] for v in attacks.values() if "detection" in v]
-    threshold = detection.get("threshold", 2.0)
+    adv_zs   = [v["detection"]["mean_z_score"] for v in attacks.values() if "detection" in v]
 
     fig = go.Figure()
-    fig.add_trace(go.Histogram(x=clean_zs, name="Clean", nbinsx=10,
-                               marker_color=CLEAN_BLUE, opacity=0.7))
-    fig.add_trace(go.Histogram(x=adv_zs, name="Adversarial", nbinsx=10,
-                               marker_color=ATTACK_RED, opacity=0.7))
-    fig.add_vline(x=threshold, line_dash="dash", line_color="white",
-                  annotation_text=f"Threshold = {threshold}", annotation_position="top right")
-    fig.update_layout(
-        barmode="overlay",
-        xaxis_title="Mean |z-score|",
-        yaxis_title="Count",
-        title="Z-Score Distribution: Clean vs Adversarial",
-        template="plotly_dark",
-        paper_bgcolor=CARD_BG,
-    )
+    fig.add_trace(go.Histogram(x=clean_zs, name="Clean",       nbinsx=10,
+                               marker_color=T["cobalt"], opacity=0.75))
+    fig.add_trace(go.Histogram(x=adv_zs,   name="Adversarial", nbinsx=10,
+                               marker_color=T["red"],    opacity=0.75))
+    fig.add_vline(x=threshold, line_dash="dash", line_color=T["ink"],
+                  annotation_text=f"Threshold = {threshold}",
+                  annotation_font_color=T["ink"])
+    fig.update_layout(barmode="overlay")
+    theme(fig, "Clean vs adversarial mean |z-score|")
+    fig.update_xaxes(title_text="Mean |z-score|")
+    fig.update_yaxes(title_text="Count")
     st.plotly_chart(fig, use_container_width=True)
 
-    # Attribution analysis
     attribution = detection.get("attribution", {})
     if attribution:
-        st.markdown("#### Region Attribution (Most Exploited Dimensions)")
-        fig = px.bar(
-            x=list(attribution.keys()),
-            y=list(attribution.values()),
-            color=list(attribution.values()),
-            color_continuous_scale=[[0, CLEAN_BLUE], [0.5, "#F9A825"], [1, ATTACK_RED]],
-            title="Mean |z-score| per fingerprint region across all attacks",
-            template="plotly_dark",
-        )
-        fig.update_layout(paper_bgcolor=CARD_BG, coloraxis_showscale=False,
-                          xaxis_title="Fingerprint Region", yaxis_title="Mean |z|")
+        sec("04.4", "Region Attribution")
+        st.caption("Which fingerprint regions are most exploited by the attack.")
+        vals = list(attribution.values())
+        colors = [T["cobalt"] if v < 1.5 else T["amber"] if v < 2.5 else T["red"]
+                  for v in vals]
+        fig = go.Figure(go.Bar(
+            x=list(attribution.keys()), y=vals,
+            marker_color=colors, marker_line_width=0,
+        ))
+        theme(fig, "Mean |z-score| per fingerprint region across all attacks")
+        fig.update_xaxes(title_text="Region")
+        fig.update_yaxes(title_text="Mean |z|")
         st.plotly_chart(fig, use_container_width=True)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PAGE: PRODUCT METRICS
+# TAB 05: PRODUCT METRICS
 # ─────────────────────────────────────────────────────────────────────────────
 
-elif page == "Product Metrics":
-    st.markdown("# Product Metrics")
-    st.markdown(
-        "Five metrics a Data Scientist would **own end-to-end** for Spotify's "
-        "Artist-First AI Music Lab — spanning safety, fairness, and quality."
-    )
+with tab_metrics:
+    ahs  = pm.get("afhs", 0)
+    ari  = pm.get("ari", {}).get("ari", 0)
+    fps  = pm.get("fps", {}).get("fps", 0)
+    stq  = pm.get("mean_stq", 0)
+    f1   = detection.get("metrics", {}).get("f1", 0)
 
-    # Gauge row
-    ari = pm.get("ari", {}).get("ari", 0)
-    fps = pm.get("fps", {}).get("fps", 0)
-    stq = pm.get("mean_stq", 0)
-    afhs = pm.get("afhs", 0)
-    f1 = detection.get("metrics", {}).get("f1", 0)
+    stat_bar([
+        (f"{ahs:.3f}",  "AHS",          "artist health score"),
+        (f"{ari:.3f}",  "ARI",          "robustness index"),
+        (f"{fps:.3f}",  "FPS",          "fairness parity"),
+        (f"{stq:.3f}",  "STQ",          "style quality"),
+        (f"{f1:.3f}",   "Detection F1", "adversarial recall"),
+    ])
 
-    def make_gauge(value, title, color):
-        return go.Figure(go.Indicator(
-            mode="gauge+number",
-            value=value,
-            title={"text": title, "font": {"size": 13}},
-            number={"font": {"size": 28, "color": color}},
-            gauge={
-                "axis": {"range": [0, 1]},
-                "bar": {"color": color},
-                "bgcolor": "#282828",
-                "steps": [
-                    {"range": [0, 0.5], "color": "#333"},
-                    {"range": [0.5, 0.8], "color": "#2a2a2a"},
-                    {"range": [0.8, 1], "color": "#222"},
-                ],
-                "threshold": {"line": {"color": "white", "width": 2}, "value": 0.8},
-            }
-        )).update_layout(
-            paper_bgcolor=CARD_BG, font_color="white",
-            height=200, margin=dict(l=20, r=20, t=40, b=10)
-        )
-
-    g1, g2, g3, g4, g5 = st.columns(5)
-    g1.plotly_chart(make_gauge(afhs, "AFHS", SPOTIFY_GREEN), use_container_width=True)
-    g2.plotly_chart(make_gauge(ari, "ARI", CLEAN_BLUE), use_container_width=True)
-    g3.plotly_chart(make_gauge(fps, "FPS", "#F9A825"), use_container_width=True)
-    g4.plotly_chart(make_gauge(stq, "STQ", "#AB47BC"), use_container_width=True)
-    g5.plotly_chart(make_gauge(f1, "Detection F1", SPOTIFY_GREEN), use_container_width=True)
-
-    # Metric definitions
-    st.markdown("#### Metric Definitions")
+    sec("05.1", "Metric Definitions")
     st.markdown("""
-| Metric | Full Name | Formula | What it measures |
-|--------|-----------|---------|-----------------|
-| **ADPS** | Artist DNA Preservation Score | `cos_sim(original, generated)` | Does generation stay true to the source artist? |
-| **STQ** | Style Transfer Quality | `H-mean(fidelity, imperceptibility)` | How faithfully is style transferred while staying imperceptible? |
-| **ARI** | Adversarial Robustness Index | `H-mean(detection_rate, confidence)` | How resilient is the system to identity-spoofing? |
-| **FPS** | Fairness Parity Score | `1 - Gini(per-artist protection)` | Are all artists protected equally? |
-| **AFHS** | Artist-First Health Score | `0.4×ARI + 0.3×FPS + 0.3×STQ` | Composite dashboard KPI |
+| Metric | Abbr | Formula | Measures |
+|--------|------|---------|---------|
+| Artist DNA Preservation Score | ADPS | cos\_sim(original, generated) | Identity fidelity |
+| Style Transfer Quality | STQ | H-mean(fidelity, imperceptibility) | Attack quality |
+| Adversarial Robustness Index | ARI | H-mean(detection\_rate, confidence) | System safety |
+| Fairness Parity Score | FPS | 1 - Gini(per-artist protection) | Equitable protection |
+| Artist Health Score | AHS | 0.4 x ARI + 0.3 x FPS + 0.3 x STQ | Composite dashboard KPI |
     """)
 
-    # Per-pair ADPS comparison
-    st.markdown("#### Per-Pair Style Transfer Quality")
+    sec("05.2", "Style Transfer Quality per Pair")
     stq_pairs = pm.get("per_pair_stq", {})
     if stq_pairs:
-        fig = px.bar(
-            x=list(stq_pairs.keys()),
-            y=list(stq_pairs.values()),
-            color=list(stq_pairs.values()),
-            color_continuous_scale=[[0, ATTACK_RED], [0.5, "#F9A825"], [1, SPOTIFY_GREEN]],
-            title="Style Transfer Quality (STQ) per Attack Pair",
-            template="plotly_dark",
-        )
-        fig.update_layout(paper_bgcolor=CARD_BG, coloraxis_showscale=False,
-                          xaxis_title="Attack Pair", yaxis_title="STQ")
+        vals   = list(stq_pairs.values())
+        colors = [T["red"] if v < 0.5 else T["amber"] if v < 0.75 else T["cobalt"]
+                  for v in vals]
+        fig = go.Figure(go.Bar(
+            x=list(stq_pairs.keys()), y=vals,
+            marker_color=colors, marker_line_width=0,
+        ))
+        theme(fig, "STQ per attack pair")
+        fig.update_xaxes(title_text="Attack pair", tickangle=-20)
+        fig.update_yaxes(title_text="STQ", range=[0, 1])
         st.plotly_chart(fig, use_container_width=True)
 
-    # Fairness detail
     fps_detail = pm.get("fps", {})
     if fps_detail:
+        sec("05.3", "Fairness Detail")
         col_l, col_r = st.columns(2)
         with col_l:
-            st.metric("Gini Coefficient", fps_detail.get("gini_coefficient", 0),
-                      help="0 = perfect equality in protection across artists")
-            st.metric("Worst Protected Artist", fps_detail.get("min_protection", 0))
+            stat_bar([
+                (f"{fps_detail.get('gini_coefficient', 0):.3f}", "Gini coefficient",
+                 "0 = perfect equality"),
+                (f"{fps_detail.get('min_protection', 0):.3f}",   "Min protection", "worst artist"),
+            ])
         with col_r:
-            st.metric("Best Protected Artist", fps_detail.get("max_protection", 0))
-            st.metric("Std Protection Spread", fps_detail.get("std_protection", 0))
+            stat_bar([
+                (f"{fps_detail.get('max_protection', 0):.3f}",   "Max protection",  "best artist"),
+                (f"{fps_detail.get('std_protection', 0):.3f}",   "Std protection",  "spread"),
+            ])
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PAGE: EVAL FRAMEWORK
+# TAB 06: EVAL FRAMEWORK
 # ─────────────────────────────────────────────────────────────────────────────
 
-elif page == "Eval Framework":
-    st.markdown("# Evaluation Framework")
+with tab_eval:
     st.markdown(
-        "Infrastructure a Spotify DS would use to design experiments, "
-        "validate causal claims, audit fairness, and quantify ecosystem impact."
+        "Experimental infrastructure for designing A/B tests, validating causal claims, "
+        "auditing fairness, and quantifying ecosystem impact."
     )
 
-    tab1, tab2, tab3, tab4 = st.tabs(
+    ef_tab1, ef_tab2, ef_tab3, ef_tab4 = st.tabs(
         ["A/B Tests", "Causal Inference", "Fairness Audit", "Ecosystem Impact"]
     )
 
-    with tab1:
-        st.markdown("#### A/B Test Power Analysis at Spotify Scale")
-        st.markdown("Assumes ~25M daily eligible users for generative music features.")
+    with ef_tab1:
+        sec("06.1", "A/B Test Power Analysis")
+        st.caption("Assumes ~25M daily eligible users for generative music features.")
         ab_rows = ef.get("ab_tests", [])
         if ab_rows:
-            df_ab = pd.DataFrame(ab_rows)
-            df_ab = df_ab.rename(columns={
-                "metric": "Metric",
-                "n_per_variant": "n per Variant",
-                "runtime_days_at_spotify_scale": "Runtime (days)",
-                "mde_relative": "MDE",
-                "baseline": "Baseline",
-                "alpha": "α",
-                "power": "Power",
+            df_ab = pd.DataFrame(ab_rows).rename(columns={
+                "metric":                "Metric",
+                "n_per_variant":         "n / Variant",
+                "runtime_days_at_scale": "Runtime (days)",
+                "mde_relative":          "MDE",
+                "baseline":              "Baseline",
+                "alpha":                 "alpha",
+                "power":                 "Power",
             })
-            st.dataframe(df_ab[["Metric", "Baseline", "MDE", "n per Variant",
-                                  "Runtime (days)", "α", "Power"]],
-                         use_container_width=True, hide_index=True)
+            cols = [c for c in ["Metric", "Baseline", "MDE", "n / Variant",
+                                 "Runtime (days)", "alpha", "Power"]
+                    if c in df_ab.columns]
+            st.dataframe(df_ab[cols], use_container_width=True, hide_index=True)
             st.info(
-                "At Spotify scale, most experiments reach significance within **1 day** "
-                "of exposure — but novelty effects and carryover bias still require "
-                "a minimum **1–2 week holdout** for reliable estimates."
+                "At this scale, most experiments reach significance within 1 day of exposure "
+                "-- but novelty effects and carryover bias still require a minimum "
+                "1-2 week holdout for reliable estimates."
             )
 
-    with tab2:
-        st.markdown("#### Difference-in-Differences (Causal Inference)")
+    with ef_tab2:
+        sec("06.2", "Difference-in-Differences")
         st.markdown(
-            "Simulated rollout analysis using a 2×2 DiD estimator with "
-            "bootstrap confidence intervals — for observational settings where "
-            "randomization isn't possible."
+            "Simulated rollout analysis using a 2x2 DiD estimator with "
+            "bootstrap confidence intervals -- for observational settings "
+            "where randomization is not possible."
         )
         did = ef.get("did_example", {})
         if did:
-            c1, c2, c3 = st.columns(3)
-            c1.metric("ATT Estimate", f"{did.get('att_estimate', 0):+.4f}")
-            c2.metric("95% CI",
-                      f"[{did.get('ci_95_lo', 0):+.3f}, {did.get('ci_95_hi', 0):+.3f}]")
-            c3.metric("p-value", did.get("p_value", 0),
-                      delta="Significant ✓" if did.get("significant") else "Not sig")
+            stat_bar([
+                (f"{did.get('att_estimate', 0):+.4f}", "ATT Estimate", "avg treatment effect"),
+                (f"[{did.get('ci_95_lo', 0):+.3f}, {did.get('ci_95_hi', 0):+.3f}]",
+                 "95% CI", "bootstrap"),
+                (str(did.get("p_value", "-")), "p-value",
+                 "significant" if did.get("significant") else "not significant"),
+            ])
 
-            # Visualize treatment vs control trend
-            rng = np.random.default_rng(42)
             periods = ["Pre", "Post"]
             fig = go.Figure()
-            fig.add_trace(go.Bar(name="Control", x=periods,
-                                 y=[round(did.get("att_estimate", 0) * 0 + 0.62, 3),
-                                    round(0.62 + did.get("control_trend", 0), 3)],
-                                 marker_color=CLEAN_BLUE))
-            fig.add_trace(go.Bar(name="Treatment", x=periods,
-                                 y=[0.62,
-                                    round(0.62 + did.get("treatment_trend", 0), 3)],
-                                 marker_color=SPOTIFY_GREEN))
-            fig.update_layout(
-                barmode="group",
-                title="DiD: Pre/Post Metric by Group",
-                template="plotly_dark",
-                paper_bgcolor=CARD_BG,
-                yaxis=dict(range=[0.6, 0.72]),
-            )
+            fig.add_trace(go.Bar(
+                name="Control", x=periods,
+                y=[round(0.62, 3), round(0.62 + did.get("control_trend", 0), 3)],
+                marker_color=T["cobalt"], marker_line_width=0,
+            ))
+            fig.add_trace(go.Bar(
+                name="Treatment", x=periods,
+                y=[0.62, round(0.62 + did.get("treatment_trend", 0), 3)],
+                marker_color=T["amber"], marker_line_width=0,
+            ))
+            fig.update_layout(barmode="group")
+            theme(fig, "DiD: Pre/Post metric by group")
+            fig.update_yaxes(range=[0.6, 0.72])
             st.plotly_chart(fig, use_container_width=True)
 
-    with tab3:
-        st.markdown("#### Fairness Audit — Disparate Impact Analysis")
+    with ef_tab3:
+        sec("06.3", "Fairness Audit -- Disparate Impact Analysis")
         st.markdown(
             "4/5ths rule: a group is disadvantaged if its mean protection score "
-            "is < 80% of the best-performing group's mean."
+            "is < 80% of the best-performing group."
         )
         audit = ef.get("fairness_audit", {})
         if audit:
-            rows = [
-                {"Group": g,
-                 "Mean Protection": v["mean"],
-                 "Impact Ratio": v["impact_ratio"],
-                 "n": v["n"],
-                 "Disparate Impact": "⚠️ YES" if v["disparate_impact"] else "✓ No"}
+            audit_rows = [
+                {
+                    "Group":            g,
+                    "Mean Protection":  v["mean"],
+                    "Impact Ratio":     v["impact_ratio"],
+                    "n":                v["n"],
+                    "Disparate Impact": "YES" if v["disparate_impact"] else "no",
+                }
                 for g, v in audit.items()
             ]
-            df_audit = pd.DataFrame(rows).sort_values("Impact Ratio")
+            df_audit = pd.DataFrame(audit_rows).sort_values("Impact Ratio")
             st.dataframe(df_audit, use_container_width=True, hide_index=True)
 
-            fig = px.bar(
-                df_audit, x="Group", y="Impact Ratio",
-                color="Impact Ratio",
-                color_continuous_scale=[[0, ATTACK_RED], [0.8, "#F9A825"], [1, SPOTIFY_GREEN]],
-                title="Fairness Impact Ratio by Group (4/5ths rule: flag if < 0.80)",
-                template="plotly_dark",
-            )
-            fig.add_hline(y=0.80, line_dash="dash", line_color="white",
-                          annotation_text="4/5ths threshold")
-            fig.update_layout(paper_bgcolor=CARD_BG, coloraxis_showscale=False)
+            vals   = df_audit["Impact Ratio"].tolist()
+            colors = [T["red"] if v < 0.8 else T["amber"] if v < 0.9 else T["cobalt"]
+                      for v in vals]
+            fig = go.Figure(go.Bar(
+                x=df_audit["Group"].tolist(), y=vals,
+                marker_color=colors, marker_line_width=0,
+            ))
+            fig.add_hline(y=0.80, line_dash="dash", line_color=T["sub"],
+                          annotation_text="4/5ths threshold (0.80)",
+                          annotation_font_color=T["sub"])
+            theme(fig, "Fairness impact ratio by group")
+            fig.update_xaxes(title_text="Group")
+            fig.update_yaxes(title_text="Impact ratio")
             st.plotly_chart(fig, use_container_width=True)
 
-    with tab4:
-        st.markdown("#### Ecosystem Impact Model")
+    with ef_tab4:
+        sec("06.4", "Ecosystem Impact Model")
         st.markdown(
             "Estimated financial impact of adversarial identity spoofing on "
-            "artist royalty flows at Spotify scale."
+            "artist royalty flows at scale."
         )
         eco = ef.get("ecosystem_impact", {})
         if eco:
-            c1, c2, c3, c4 = st.columns(4)
-            c1.metric("Daily generations", f"{eco.get('daily_generations', 0):,}")
-            c2.metric("Est. daily attacks", f"{eco.get('estimated_daily_attacks', 0):,}")
-            c3.metric("Royalty protected/day",
-                      f"${eco.get('royalty_protected_daily_usd', 0):.2f}")
-            c4.metric("Annual protected value",
-                      f"${eco.get('annual_protected_usd', 0):,.0f}")
+            stat_bar([
+                (f"{eco.get('daily_generations', 0):,}",
+                 "Daily generations", ""),
+                (f"{eco.get('estimated_daily_attacks', 0):,}",
+                 "Est. daily attacks", "1% attack rate"),
+                (f"${eco.get('royalty_protected_daily_usd', 0):.2f}",
+                 "Royalty protected/day", "USD"),
+                (f"${eco.get('annual_protected_usd', 0):,.0f}",
+                 "Annual protected value", "USD"),
+            ])
 
-            # Sankey: generations → attacks → outcomes
             fig = go.Figure(go.Sankey(
                 node=dict(
-                    label=["Daily Generations", "Attack Attempts", "Detected",
-                           "Missed", "No Attack"],
-                    color=[SPOTIFY_GREEN, ATTACK_RED, CLEAN_BLUE, "#E53935", SPOTIFY_GREEN],
+                    label=["Daily Generations", "Attack Attempts",
+                           "Detected", "Missed", "No Attack"],
+                    color=[T["cobalt"], T["red"], T["cobalt"], T["red"], T["cobalt"]],
+                    pad=20, thickness=20,
                 ),
                 link=dict(
                     source=[0, 1, 1, 0],
@@ -793,24 +887,27 @@ elif page == "Eval Framework":
                         eco.get("missed_attacks", 0),
                         eco.get("daily_generations", 0) - eco.get("estimated_daily_attacks", 0),
                     ],
-                    color=[ATTACK_RED, CLEAN_BLUE, ATTACK_RED, SPOTIFY_GREEN],
+                    color=[
+                        "rgba(168,28,28,0.3)", "rgba(27,61,107,0.3)",
+                        "rgba(168,28,28,0.3)", "rgba(27,61,107,0.3)",
+                    ],
                 ),
             ))
             fig.update_layout(
-                title="Daily Traffic Flow: Generations → Attacks → Outcomes",
-                template="plotly_dark",
-                paper_bgcolor=CARD_BG,
-                font_color="white",
+                paper_bgcolor=T["bg"],
+                font=dict(family=T["font"], color=T["ink"], size=12),
+                height=380,
+                margin=dict(l=20, r=20, t=30, b=20),
             )
             st.plotly_chart(fig, use_container_width=True)
 
 
 # ── Footer ────────────────────────────────────────────────────────────────────
-st.markdown("---")
 st.markdown(
-    '<div style="text-align:center; color:#B3B3B3; font-size:0.8rem;">'
-    "Built for Spotify's Artist-First AI Music Lab · "
-    "SD-MIAE methodology · Last.fm data"
+    f'<div style="border-top:1px solid {T["rule"]};margin-top:3rem;padding-top:1rem;'
+    f'font-family:{T["mono"]};font-size:0.72rem;color:{T["sub"]};letter-spacing:0.06em;">'
+    "SD-MIAE methodology &nbsp;/&nbsp; Last.fm data &nbsp;/&nbsp; "
+    "adversarial-music-eval"
     "</div>",
     unsafe_allow_html=True,
 )

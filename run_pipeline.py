@@ -2,13 +2,13 @@
 One-command pipeline runner.
 
 Executes the full adversarial music evaluation pipeline in order:
-  1. fetch_artists.py   — pull Last.fm data
-  2. fingerprint.py     — build 54-dim DNA vectors
-  3. attack.py          — run SD-MIAE on 5 pairs
-  4. detect.py          — statistical anomaly detection
-  5. metrics.py         — product metric computation
-  6. eval_framework.py  — A/B tests, fairness, ecosystem impact
-  7. visualize.py       — generate all figures
+  1. fetch_artists.py    -  pull Last.fm data
+  2. fingerprint.py      -  build 54-dim DNA vectors
+  3. attack.py           -  run SD-MIAE on 5 pairs
+  4. detect.py           -  statistical anomaly detection
+  5. metrics.py          -  product metric computation
+  6. eval_framework.py   -  A/B tests, fairness, ecosystem impact
+  7. visualize.py        -  generate all figures
 
 Usage:
     python run_pipeline.py
@@ -66,7 +66,7 @@ def main():
 
     print("=" * 60)
     print("  ADVERSARIAL MUSIC EVALUATION PIPELINE")
-    print("  SD-MIAE × Last.fm × Spotify Artist-First Principles")
+    print("  SD-MIAE x Last.fm x Artist Identity Evaluation")
     print("=" * 60)
 
     Path("data").mkdir(exist_ok=True)
@@ -103,7 +103,7 @@ def main():
 
         pm = results.get("product_metrics", {})
         if pm:
-            print(f"\n  Artist-First Health Score: {pm.get('afhs', 'N/A')}")
+            print(f"\n  Artist Health Score (AHS): {pm.get('afhs', 'N/A')}")
             print(f"  Adversarial Robustness:    {pm.get('ari', {}).get('ari', 'N/A')}")
             print(f"  Fairness Parity:           {pm.get('fps', {}).get('fps', 'N/A')}")
             print(f"  Style Transfer Quality:    {pm.get('mean_stq', 'N/A')}")
