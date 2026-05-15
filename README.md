@@ -12,8 +12,7 @@ As generative AI music systems scale to hundreds of millions of listeners,
 a new attack surface emerges: **adversarial style injection**. An attacker
 can craft a small perturbation δ to an artist's conditioning fingerprint
 such that a generative model produces output that *sounds like a different
-artist* — silently redirecting royalty flow, distorting artist–fan
-connections, and violating the artist's creative identity.
+artist*
 
 This project adapts **SD-MIAE** (Style-Directed Momentum-Integrated
 Adversarial Example attack, from my IEEE publication) to the music domain,
