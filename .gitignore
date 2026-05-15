@@ -9,8 +9,13 @@ env/
 dist/
 build/
 
-# Figures (regenerate locally with visualize.py — too large for git)
+# Figures (regenerate locally with visualize.py - too large for git)
 figures/*.png
+
+# Pipeline outputs (regenerate locally with run_pipeline.py)
+data/artists.json
+data/fingerprints.json
+data/results.json
 
 # Jupyter
 .ipynb_checkpoints/
