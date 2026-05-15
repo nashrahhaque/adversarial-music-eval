@@ -150,7 +150,6 @@ informing which features to harden in a production system.
 
 ## Product Metrics
 
-Five metrics designed for a Data Scientist to *own end-to-end*:
 
 | Metric | Abbr | Formula | Measures |
 |--------|------|---------|---------|
@@ -172,7 +171,7 @@ Beyond the core attack/detect loop, `eval_framework.py` provides:
 
 ### A/B Test Power Analysis
 Pre-computed sample sizes and runtimes for four generative music metrics
-at Spotify scale (~25M daily eligible users):
+
 
 | Metric                   | n/variant | Runtime  | MDE   |
 |--------------------------|-----------|----------|-------|
@@ -180,10 +179,6 @@ at Spotify scale (~25M daily eligible users):
 | Artist save rate         | ~25,000   | <1 day   | +10%  |
 | Skip rate                | ~45,000   | <1 day   | −5%   |
 | New artist discovery     | ~30,000   | <1 day   | +8%   |
-
-At Spotify's scale, most experiments can reach significance within a
-single day — but **novelty effects** and **carryover bias** still
-require minimum 1–2 week holdouts.
 
 ### Causal Inference
 Difference-in-Differences estimator with bootstrap confidence intervals
