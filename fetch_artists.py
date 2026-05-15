@@ -11,8 +11,8 @@ import time
 import os
 from pathlib import Path
 
-API_KEY = os.environ.get("LASTFM_API_KEY", "46eb12b421be427bb25e83088f533b3f")
-BASE_URL = "http://ws.audioscrobbler.com/2.0/"
+API_KEY = os.environ.get("LASTFM_API_KEY", "")
+BASE_URL = "https://ws.audioscrobbler.com/2.0/"
 
 ARTISTS = [
     "Taylor Swift",
