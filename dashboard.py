@@ -73,13 +73,69 @@ st.markdown(f"""
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
-  html, body, [class*="css"] {{
-      font-family: {T["font"]};
-      background-color: {T["bg"]};
-      color: {T["ink"]};
+  html, body, [class*="css"], [data-testid="stAppViewContainer"],
+  [data-testid="stMain"], [data-testid="block-container"] {{
+      font-family: {T["font"]} !important;
+      background-color: {T["bg"]} !important;
+      color: {T["ink"]} !important;
   }}
-  .stApp {{ background-color: {T["bg"]}; }}
-  .block-container {{ padding-top: 2rem; padding-bottom: 3rem; max-width: 1280px; }}
+  .stApp, .stApp > div, [data-testid="stAppViewContainer"] > div {{
+      background-color: {T["bg"]} !important;
+  }}
+  .block-container {{ padding-top: 2rem !important; padding-bottom: 3rem; max-width: 1280px; }}
+
+  /* force all text dark */
+  p, li, span, label, div, h1, h2, h3, h4, h5, h6,
+  .stMarkdown, .stText, .stCaption,
+  [data-testid="stMarkdownContainer"] * {{
+      color: {T["ink"]} !important;
+  }}
+  /* override Streamlit metric/widget backgrounds */
+  [data-testid="stMetric"],
+  [data-testid="metric-container"],
+  [data-testid="stVerticalBlock"],
+  [data-testid="stHorizontalBlock"] {{
+      background-color: {T["bg"]} !important;
+  }}
+  /* tabs */
+  .stTabs [data-baseweb="tab-list"] {{
+      background-color: {T["bg"]} !important;
+      border-bottom: 2px solid {T["rule"]} !important;
+      gap: 0 !important;
+  }}
+  .stTabs [data-baseweb="tab"] {{
+      background-color: {T["bg"]} !important;
+      color: {T["sub"]} !important;
+      font-family: {T["mono"]} !important;
+      font-size: 0.75rem !important;
+      letter-spacing: 0.08em !important;
+      border: none !important;
+      padding: 0.6rem 1.2rem !important;
+  }}
+  .stTabs [aria-selected="true"] {{
+      color: {T["ink"]} !important;
+      border-bottom: 2px solid {T["ink"]} !important;
+  }}
+  /* selectbox, multiselect */
+  [data-testid="stSelectbox"] *, [data-testid="stMultiSelect"] * {{
+      color: {T["ink"]} !important;
+      background-color: {T["bg"]} !important;
+  }}
+  /* dataframe */
+  .stDataFrame, [data-testid="stDataFrame"] {{
+      background-color: {T["bg"]} !important;
+  }}
+  [data-testid="stDataFrame"] td, [data-testid="stDataFrame"] th {{
+      color: {T["ink"]} !important;
+      background-color: {T["bg"]} !important;
+  }}
+  /* info/warning boxes */
+  [data-testid="stAlert"] {{
+      background-color: #EEECEB !important;
+      border: 1px solid {T["rule"]} !important;
+      color: {T["ink"]} !important;
+  }}
+  [data-testid="stAlert"] * {{ color: {T["ink"]} !important; }}
 
   /* masthead */
   .masthead {{
@@ -88,18 +144,18 @@ st.markdown(f"""
       margin-bottom: 2.5rem;
   }}
   .masthead-title {{
-      font-size: clamp(2.4rem, 4vw, 3.8rem);
-      font-weight: 900;
+      font-size: clamp(2.4rem, 4vw, 3.8rem) !important;
+      font-weight: 900 !important;
       letter-spacing: -0.03em;
       line-height: 1.05;
-      color: {T["ink"]};
+      color: {T["ink"]} !important;
       margin: 0;
   }}
   .masthead-sub {{
       font-size: 0.82rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: {T["sub"]};
+      color: {T["sub"]} !important;
       margin-top: 0.5rem;
   }}
 
@@ -115,14 +171,14 @@ st.markdown(f"""
   .sec-num {{
       font-family: {T["mono"]};
       font-size: 0.72rem;
-      color: {T["sub"]};
+      color: {T["sub"]} !important;
       letter-spacing: 0.1em;
   }}
   .sec-title {{
       font-size: 1.05rem;
       font-weight: 700;
       letter-spacing: -0.01em;
-      color: {T["ink"]};
+      color: {T["ink"]} !important;
   }}
 
   /* stat bar */
@@ -136,26 +192,27 @@ st.markdown(f"""
   .stat-cell {{
       padding: 1.2rem 1.4rem;
       border-right: 1px solid {T["rule"]};
+      background-color: {T["bg"]};
   }}
   .stat-cell:last-child {{ border-right: none; }}
   .stat-val {{
       font-family: {T["mono"]};
       font-size: 2rem;
       font-weight: 700;
-      color: {T["ink"]};
+      color: {T["ink"]} !important;
       line-height: 1;
   }}
   .stat-lbl {{
       font-size: 0.72rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: {T["sub"]};
+      color: {T["sub"]} !important;
       margin-top: 0.4rem;
   }}
   .stat-note {{
       font-family: {T["mono"]};
       font-size: 0.72rem;
-      color: {T["sub"]};
+      color: {T["sub"]} !important;
       margin-top: 0.2rem;
   }}
 
@@ -167,7 +224,7 @@ st.markdown(f"""
       letter-spacing: 0.05em;
       padding: 0.15rem 0.5rem;
       border: 1px solid {T["rule"]};
-      color: {T["sub"]};
+      color: {T["sub"]} !important;
       margin: 0.15rem;
   }}
 
@@ -176,9 +233,12 @@ st.markdown(f"""
       border-left: 3px solid {T["red"]};
       padding: 0.75rem 1rem;
       margin-bottom: 0.5rem;
-      background: white;
+      background-color: {T["bg"]};
+      border-top: 1px solid {T["rule"]};
+      border-right: 1px solid {T["rule"]};
+      border-bottom: 1px solid {T["rule"]};
   }}
-  .atk-card b {{ color: {T["ink"]}; }}
+  .atk-card b {{ color: {T["ink"]} !important; }}
 
   /* alert */
   .alert-flag {{
