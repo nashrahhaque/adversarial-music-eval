@@ -103,7 +103,7 @@ for t = 1..T:
 
 | Param | Value | Rationale |
 |-------|-------|-----------|
-| ε     | 0.05  | 5% max feature perturbation — imperceptible to metadata filters |
+| ε     | 0.05  | 5% max feature perturbation imperceptible to metadata filters |
 | μ     | 0.9   | Strong momentum to escape flat cosine-similarity landscapes    |
 | α     | 0.01  | Conservative step size for stable convergence                  |
 | T     | 20    | Sufficient for >90% similarity in 4/5 pairs                    |
@@ -181,7 +181,7 @@ Pre-computed sample sizes and runtimes for four generative music metrics
 
 ### Causal Inference
 Difference-in-Differences estimator with bootstrap confidence intervals
-for observational rollout analysis — for when randomization isn't possible
+for observational rollout analysis, for when randomization isn't possible
 (e.g., model updates that can't be cleanly A/B split).
 
 ### Fairness Audit
