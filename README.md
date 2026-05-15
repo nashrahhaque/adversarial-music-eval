@@ -4,7 +4,6 @@
 > A research prototype demonstrating how adversarial ML methodology
 > can protect artist identity in AI-powered music generation systems!
 
----
 
 ## Motivation
 
