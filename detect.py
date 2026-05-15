@@ -45,11 +45,11 @@ def z_scores(embedding: np.ndarray, dist_mean: np.ndarray, dist_std: np.ndarray)
     Per-dimension z-scores measuring how far an embedding deviates from
     the clean distribution mean, scaled by each dimension's natural variance.
 
-    Dimensions with near-zero natural variance (std < 0.005) are the most
+    Dimensions with near-zero natural variance (std < 0.002) are the most
     sensitive: ANY perturbation there stands out strongly. We floor std at
-    0.005 so those dims contribute a large but finite signal rather than
+    0.002 so those dims contribute a large but finite signal rather than
     infinite z-scores. The floor is chosen so that the maximum L∞ budget
-    (ε=0.05) on a near-constant dim produces z = 0.05/0.005 = 10, a clear
+    (ε=0.05) on a near-constant dim produces z = 0.05/0.002 = 25, a clear
     anomaly that pushes the mean above the 2.0 threshold.
     """
     safe_std = np.where(dist_std >= 0.002, dist_std, 0.002)
